@@ -388,6 +388,8 @@ const ALL_COMMANDS = [
   "resetAllRows",
   "initChangeAllModulesWithArgs",
 ];
+
+//comment
 function showCommands() {
   searchStr = this.value;
   const searchedCMDs = ALL_COMMANDS.filter(cmd =>
