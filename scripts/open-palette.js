@@ -378,6 +378,7 @@ function executeCommand() {
 }
 
 const ALL_COMMANDS = [
+  "thisNotACommand",
   "hello",
   "resetText",
   "marginZeroAllModules",
