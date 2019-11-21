@@ -14,7 +14,7 @@ jobs:
         port: 22
         method: sftp
       env:
-        FTP_SERVER: ${{ secrets.SERVER_NAME }}
+        FTP_SERVER: sftp://wallace.outthinkgroup.com
         FTP_USERNAME: ${{ secrets.SERVER_USER }}
         FTP_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         REMOTE_DIR: /srv/users/projects/apps/dev/public/wp-content/plugins/bb_commander
