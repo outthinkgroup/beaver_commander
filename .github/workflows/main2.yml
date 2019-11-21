@@ -17,7 +17,7 @@ jobs:
         FTP_SERVER: 45.56.67.41
         FTP_USERNAME: ${{ secrets.SERVER_USER }}
         FTP_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
-        REMOTE_DIR: /public/wp-content/plugins/bb_commander
+        REMOTE_DIR: /srv/users/projects/apps/dev/public/wp-content/plugins/bb_commander
         ARGS: --delete
         PORT: 22
         METHOD: sftp
