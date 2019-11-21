@@ -1,0 +1,38 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Run a one-line script
+      run: echo Hello, world!
+    - name: Run a multi-line script
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
+    - name: FTP Deploy
+      uses: SamKirkland/FTP-Deploy-Action@2.0.0
+      env:
+        SERVER_NAME: secrets.SERVER_NAME 
+        SERVER_USER: secrets.SERVER_USER
+        SERVER_PASSWORD: secrets.SERVER_PASSWORD
+      with:
+        # FTP server name (you may need to specify a port)
+        ftp_server: SERVER_NAME
+        # FTP account username
+        ftp_username: SERVER_USER
+        # FTP account password
+        ftp_password: SERVER_PASSWORD
+        # Protocol used to deploy (ftp or sftp)
+        method: sftp
+        # The port used to connect to server
+        port: 22
+        # The remote folder to copy to, deafults to root FTP folder (I recommend you configure this on your server side instead of here)
+        remote_dir: /srv/users/projects/apps/dev/public/wp-content/plugins/bb_commander
+        # Passes through options into lftp
+         
