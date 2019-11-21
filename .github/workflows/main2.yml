@@ -16,11 +16,11 @@ jobs:
         SERVER_PASSWORD: secrets.SERVER_PASSWORD
       with:
         # FTP server name (you may need to specify a port)
-        ftp_server: SERVER_NAME
+        ftp_server: ${{SERVER_NAME}}
         # FTP account username
-        ftp_username: SERVER_USER
+        ftp_username: ${{SERVER_USER}}
         # FTP account password
-        ftp_password: SERVER_PASSWORD
+        ftp_password: ${{SERVER_PASSWORD}}
         # Protocol used to deploy (ftp or sftp)
         method: sftp
         # The port used to connect to server
