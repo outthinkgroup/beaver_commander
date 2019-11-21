@@ -12,7 +12,7 @@ jobs:
       uses: SamKirkland/FTP-Deploy-Action@2.0.0
       env:
         FTP_SERVER: ${{ secrets.SERVER_NAME }}
-        FTP_USERNAME: ${{ secrets.SERVER_USERNAME }}
+        FTP_USERNAME: ${{ secrets.SERVER_USER }}
         FTP_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         REMOTE_DIR: /srv/users/projects/apps/dev/public/wp-content/plugins/bb_commander
         METHOD: sftp
