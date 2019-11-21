@@ -11,4 +11,5 @@ jobs:
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
         SLACK_OVERRIDE_MESSAGE: 'Updates to BB_Commander check `em out🚀'
+        SLACK_TITLE: BB Commander Updates
     
