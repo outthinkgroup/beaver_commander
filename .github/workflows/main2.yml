@@ -10,6 +10,9 @@ jobs:
     - uses: actions/checkout@master
     - name: FTP-Deploy-Action
       uses: SamKirkland/FTP-Deploy-Action@2.0.0
+      with:
+        port: 22
+        method: sftp
       env:
         FTP_SERVER: ${{ secrets.SERVER_NAME }}
         FTP_USERNAME: ${{ secrets.SERVER_USER }}
