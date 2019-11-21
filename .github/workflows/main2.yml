@@ -14,5 +14,8 @@ jobs:
         FTP_SERVER: ${{ secrets.SERVER_NAME }}
         FTP_USERNAME: ${{ secrets.SERVER_USERNAME }}
         FTP_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        REMOTE_DIR: /srv/users/projects/apps/dev/public/wp-content/plugins/bb_commander
+        METHOD: sftp
+        PORT: 22
         ARGS: --delete
         # --delete arg will delete files on the server if you've deleted them in git
