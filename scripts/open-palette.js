@@ -1,43 +1,4 @@
-function CMDR_resetFn() {
-  document
-    .querySelectorAll(
-      ".fl-builder-settings-fields input, .fl-builder-settings-fields select"
-    )
-    .forEach(input => {
-      if (input.style.display === "none") {
-        return null;
-      }
-      if (input.name == "visibility_display") {
-        return null;
-      }
-
-      if (input.tagName == "INPUT") {
-        input.value = "";
-        if (
-          input.classList.contains("text-full") &&
-          input.name !== "id" &&
-          input.name !== "class"
-        ) {
-          input.value = "edit" + input.name;
-        }
-      } else if (input.tagName == "SELECT") {
-        if (input.name === "tag") {
-          return null;
-        }
-        if (input.name === "full_height") {
-          input.value = "default";
-          console.log(input.value);
-        }
-        var option = input.querySelector("option");
-
-        input.value = option && option.value; //incase their are no options
-      } else {
-        return;
-      }
-    });
-
-  FLBuilder._saveSettings();
-}
+import CMDR_resetFn from "./pallet-commands/CMDR_resetFn";
 
 function CMD_marginsZero() {
   document
@@ -71,8 +32,8 @@ function CMDR_renderAllModuleSettings(modulesArray, cb, increment) {
       settings: FLBuilderSettingsConfig.nodes[nodeId],
       type: "module",
       preview: {
-        type: `${module.dataset.type}`,
-      },
+        type: `${module.dataset.type}`
+      }
     },
     function() {
       //recursively calls itself to loop through all the array in order
@@ -104,8 +65,8 @@ function CMDR_renderAllColumnSettings(modulesArray, cb, increment) {
       buttons: ["save"],
       settings: FLBuilderSettingsConfig.nodes[nodeId],
       preview: {
-        type: `col`,
-      },
+        type: `col`
+      }
     },
     function() {
       //recursively calls itself to loop through all the array in order
@@ -137,8 +98,8 @@ function CMDR_renderAllRowSettings(modulesArray, cb, increment) {
       buttons: ["save"],
       settings: FLBuilderSettingsConfig.nodes[nodeId],
       preview: {
-        type: `row`,
-      },
+        type: `row`
+      }
     },
     function() {
       //recursively calls itself to loop through all the array in order
@@ -197,8 +158,8 @@ function CMDR_renderAllModuleSettingsWithArgs(
       settings: FLBuilderSettingsConfig.nodes[nodeId],
       type: "module",
       preview: {
-        type: `${module.dataset.type}`,
-      },
+        type: `${module.dataset.type}`
+      }
     },
     function() {
       //recursively calls itself to loop through all the array in order
@@ -275,10 +236,15 @@ const BBComander = {
   hello: function() {
     console.log("hello world");
   },
+  /**
+   * resets the open settings form.
+   * to my defaults {empty string or default text}
+   */
   resetOpenModule: function() {
     document
       .querySelectorAll(
-        ".fl-builder-settings-fields input, .fl-builder-settings-fields select "
+        `.fl-builder-settings-fields input, 
+        .fl-builder-settings-fields select `
       )
       .forEach(input => {
         if (input.tagName == "INPUT") {
@@ -367,7 +333,7 @@ const BBComander = {
         newValue
       );
     }
-  },
+  }
 };
 
 function executeCommand() {
@@ -387,10 +353,10 @@ const ALL_COMMANDS = [
   "resetOpenModule",
   "resetAllColumns",
   "resetAllRows",
-  "initChangeAllModulesWithArgs",
+  "initChangeAllModulesWithArgs"
 ];
 
-//comment
+//this should eventually render select list like downshift
 function showCommands() {
   searchStr = this.value;
   const searchedCMDs = ALL_COMMANDS.filter(cmd =>

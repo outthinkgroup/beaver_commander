@@ -14,15 +14,7 @@ if(!class_exists('BB_Commander')){
       add_action( 'wp_enqueue_scripts', function() {
         /* Check if Beaver Builder is active  */
         if ( class_exists('FLBuilderModel') && FLBuilderModel::is_builder_active() ) {
-          /**
-           * Enqueue your custom JavaScript file
-           *
-           * Be sure to use the appropriate url reference function for whether your 
-           * code is contained in a custom plugin or theme.
-           *
-           * Include fl-builder-min as a dependency for your script to ensure
-           * Beaver Builder as well as jQuery are available when your script runs.
-          */
+         
           wp_enqueue_script(
             'bb-commander-js', 
             plugins_url( '/', dirname(__FILE__) ) . '/dist/bb-commander.js',
@@ -43,6 +35,14 @@ if(!class_exists('BB_Commander')){
           $shortcuts['openCommandPalette'] = array(
             'label' => __( 'opens the command palette', 'my-plugin'),
             'keyCode' => 'P'
+          );
+          $shortcuts['openColumnSettings'] = array(
+            'label' => __( 'opens the column setting of the hovered module', 'my-plugin'),
+            'keyCode' => 'c'
+          );
+          $shortcuts['openParentColumnSettings'] = array(
+            'label' => __( 'opens the column setting of the hovered module', 'my-plugin'),
+            'keyCode' => 'C'
           );
           return $shortcuts;
       });

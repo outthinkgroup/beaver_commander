@@ -117,14 +117,13 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"scripts/open-palette.js":[function(require,module,exports) {
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+})({"scripts/pallet-commands/CMDR_resetFn.js":[function(require,module,exports) {
+"use strict";
 
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CMDR_resetFn;
 
 function CMDR_resetFn() {
   document.querySelectorAll(".fl-builder-settings-fields input, .fl-builder-settings-fields select").forEach(function (input) {
@@ -161,6 +160,20 @@ function CMDR_resetFn() {
 
   FLBuilder._saveSettings();
 }
+},{}],"scripts/open-palette.js":[function(require,module,exports) {
+"use strict";
+
+var _CMDR_resetFn = _interopRequireDefault(require("./pallet-commands/CMDR_resetFn"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
 
 function CMD_marginsZero() {
   document.querySelectorAll(".fl-builder-settings-fields #fl-field-margin input[type=number]").forEach(function (input) {
@@ -347,8 +360,13 @@ var BBComander = {
   hello: function hello() {
     console.log("hello world");
   },
+
+  /**
+   * resets the open settings form.
+   * to my defaults {empty string or default text}
+   */
   resetOpenModule: function resetOpenModule() {
-    document.querySelectorAll(".fl-builder-settings-fields input, .fl-builder-settings-fields select ").forEach(function (input) {
+    document.querySelectorAll(".fl-builder-settings-fields input, \n        .fl-builder-settings-fields select ").forEach(function (input) {
       if (input.tagName == "INPUT") {
         if (input.type == "hidden") {
           return;
@@ -380,7 +398,7 @@ var BBComander = {
     var modules = _toConsumableArray(document.querySelectorAll(".fl-module"));
 
     var i = 0;
-    CMDR_renderAllModuleSettings(modules, CMDR_resetFn, i);
+    CMDR_renderAllModuleSettings(modules, _CMDR_resetFn.default, i);
   },
   marginsZeroOpenModule: function marginsZeroOpenModule() {
     document.querySelectorAll(".fl-builder-settings-fields #fl-field-margin input[type=number]").forEach(function (input) {
@@ -403,12 +421,12 @@ var BBComander = {
   resetAllColumns: function resetAllColumns() {
     var columns = document.querySelectorAll(".fl-col");
     var i = 0;
-    CMDR_renderAllColumnSettings(columns, CMDR_resetFn, i);
+    CMDR_renderAllColumnSettings(columns, _CMDR_resetFn.default, i);
   },
   resetAllRows: function resetAllRows() {
     var rows = document.querySelectorAll(".fl-row");
     var i = 0;
-    CMDR_renderAllRowSettings(rows, CMDR_resetFn, i);
+    CMDR_renderAllRowSettings(rows, _CMDR_resetFn.default, i);
   },
 
   /**
@@ -434,7 +452,7 @@ function executeCommand() {
   BBComander[input.value.toString()]();
 }
 
-var ALL_COMMANDS = ["resetText", "marginZeroAllModules", "marginsZeroOpenModule", "resetAllModules", "resetOpenModule", "resetAllColumns", "resetAllRows", "initChangeAllModulesWithArgs"];
+var ALL_COMMANDS = ["thisNotACommand", "hello", "resetText", "marginZeroAllModules", "marginsZeroOpenModule", "resetAllModules", "resetOpenModule", "resetAllColumns", "resetAllRows", "initChangeAllModulesWithArgs"]; //this should eventually render select list like downshift
 
 function showCommands() {
   searchStr = this.value;
@@ -531,6 +549,91 @@ this is the parent function that calls everything
     return cleanupPalette(e);
   });
 })();
+},{"./pallet-commands/CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js"}],"scripts/commands.js":[function(require,module,exports) {
+var global = arguments[3];
+//noop
+(function () {
+  function openParentColumnSettings() {
+    var module = document.querySelector(".fl-module-overlay");
+
+    if (!module) {
+      return null;
+    }
+
+    var col = module.closest(".fl-col");
+    var parent = col.parentElement.closest(".fl-col");
+
+    if (!parent) {
+      return null;
+    }
+
+    var nodeId = parent.dataset.node;
+    var global = module.closest(".fl-block-overlay-global") ? true : false;
+    FLBuilderSettingsForms.render({
+      id: "col",
+      nodeId: nodeId,
+      className: "fl-builder-col-settings",
+      attrs: 'data-node="' + nodeId + '"',
+      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
+      badges: global ? [FLBuilderStrings.global] : [],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      preview: {
+        type: "col"
+      }
+    });
+  }
+
+  function shortcutHook() {
+    // Register a hook listener using the key that you registered
+    // your shortcut with along with the function it should fire.
+    FLBuilder.addHook("openParentColumnSettings", openParentColumnSettings);
+  }
+
+  window.addEventListener("load", shortcutHook);
+})();
+
+(function () {
+  function openColumnSettings() {
+    /* 
+    1. set up hover listener
+      - needs to grab:
+         module that is hovered
+         modules column node id = `fl-col.dataset.node
+    2. excute FLBuilderSettingsForms.render(config, callback)
+      - 2. pass settings (argument 1)
+      - 3. pass callback (argrument 2)
+     */
+    var module = document.querySelector(".fl-module-overlay");
+
+    if (!module) {
+      return null;
+    }
+
+    var col = module.closest(".fl-col");
+    var nodeId = col.dataset.node;
+    var global = module.closest(".fl-block-overlay-global") ? true : false;
+    FLBuilderSettingsForms.render({
+      id: "col",
+      nodeId: nodeId,
+      className: "fl-builder-col-settings",
+      attrs: 'data-node="' + nodeId + '"',
+      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
+      badges: global ? [FLBuilderStrings.global] : [],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      preview: {
+        type: "col"
+      }
+    });
+  }
+
+  function shortcutHookColumn() {
+    // Register a hook listener using the key that you registered
+    // your shortcut with along with the function it should fire.
+    FLBuilder.addHook("openColumnSettings", openColumnSettings);
+  }
+
+  window.addEventListener("load", shortcutHookColumn);
+})();
 },{}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
@@ -608,8 +711,10 @@ module.hot.accept(reloadCSS);
 
 require("./scripts/open-palette");
 
+require("./scripts/commands");
+
 require("./styles/palette.scss");
-},{"./scripts/open-palette":"scripts/open-palette.js","./styles/palette.scss":"styles/palette.scss"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scripts/open-palette":"scripts/open-palette.js","./scripts/commands":"scripts/commands.js","./styles/palette.scss":"styles/palette.scss"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -637,7 +742,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61735" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52128" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
