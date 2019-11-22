@@ -160,20 +160,13 @@ function CMDR_resetFn() {
 
   FLBuilder._saveSettings();
 }
-},{}],"scripts/open-palette.js":[function(require,module,exports) {
+},{}],"scripts/pallet-commands/CMD_marginsZero.js":[function(require,module,exports) {
 "use strict";
 
-var _CMDR_resetFn = _interopRequireDefault(require("./pallet-commands/CMDR_resetFn"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
-
-function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CMD_marginsZero;
 
 function CMD_marginsZero() {
   document.querySelectorAll(".fl-builder-settings-fields #fl-field-margin input[type=number]").forEach(function (input) {
@@ -182,6 +175,46 @@ function CMD_marginsZero() {
 
   FLBuilder._saveSettings();
 }
+},{}],"scripts/pallet-commands/resetOpenModule.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  document.querySelectorAll(".fl-builder-settings-fields input, \n        .fl-builder-settings-fields select").forEach(function (input) {
+    if (input.tagName == "INPUT") {
+      if (input.type == "hidden") {
+        return;
+      }
+
+      input.value = " ";
+
+      if (input.classList.contains("text-full")) {
+        //looks for headings or small text
+        input.value = "default text";
+      }
+    } else {
+      if (input.name == "visibility_display") {
+        return;
+      }
+
+      var option = input.querySelector("option");
+      input.value = option.value;
+    }
+  });
+
+  FLBuilder._saveSettings();
+}
+},{}],"scripts/util/CMDR_renderAllModulesSettings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CMDR_renderAllModuleSettings;
 
 function CMDR_renderAllModuleSettings(modulesArray, cb, increment) {
   var module = modulesArray[increment];
@@ -210,6 +243,106 @@ function CMDR_renderAllModuleSettings(modulesArray, cb, increment) {
     }
   });
 }
+},{}],"scripts/pallet-commands/resetAllModules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _CMDR_renderAllModulesSettings = _interopRequireDefault(require("../util/CMDR_renderAllModulesSettings"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _default() {
+  var modules = _toConsumableArray(document.querySelectorAll(".fl-module"));
+
+  var i = 0;
+  (0, _CMDR_renderAllModulesSettings.default)(modules, CMDR_resetFn, i);
+}
+},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js"}],"scripts/pallet-commands/marginsZeroOpenModule.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  document.querySelectorAll(".fl-builder-settings-fields #fl-field-margin input[type=number]").forEach(function (input) {
+    input.value = "0";
+  });
+
+  FLBuilder._saveSettings();
+}
+},{}],"scripts/pallet-commands/marginZeroAllModules.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _CMDR_renderAllModulesSettings = _interopRequireDefault(require("../util/CMDR_renderAllModulesSettings"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _default() {
+  var modules = _toConsumableArray(document.querySelectorAll(".fl-module"));
+
+  var i = 0;
+  (0, _CMDR_renderAllModulesSettings.default)(modules, CMD_marginsZero, i);
+}
+},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js"}],"scripts/pallet-commands/resetAllRows.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+function _default() {
+  var rows = document.querySelectorAll(".fl-row");
+  var i = 0;
+  CMDR_renderAllRowSettings(rows, CMDR_resetFn, i);
+}
+},{}],"scripts/pallet-commands/resetText.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+//! this dont work!!
+function _default() {
+  var iframe = document.querySelector(".fl-builder-settings-section-content .mce-edit-area iframe");
+  iframe.contentWindow.document.body.innerHTML = "";
+}
+},{}],"scripts/util/CMDR_renderAllColumnSettings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CMDR_renderAllColumnSettings;
 
 function CMDR_renderAllColumnSettings(modulesArray, cb, increment) {
   var module = modulesArray[increment];
@@ -237,42 +370,31 @@ function CMDR_renderAllColumnSettings(modulesArray, cb, increment) {
     }
   });
 }
+},{}],"scripts/pallet-commands/resetAllColumns.js":[function(require,module,exports) {
+"use strict";
 
-function CMDR_renderAllRowSettings(modulesArray, cb, increment) {
-  var module = modulesArray[increment];
-  increment++;
-  var nodeId = module.dataset.node;
-  FLBuilderSettingsForms.render({
-    id: "row",
-    nodeId: nodeId,
-    className: "fl-builder-col-settings",
-    attrs: 'data-node="' + nodeId + "\" ",
-    buttons: ["save"],
-    settings: FLBuilderSettingsConfig.nodes[nodeId],
-    preview: {
-      type: "row"
-    }
-  }, function () {
-    //recursively calls itself to loop through all the array in order
-    cb();
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
 
-    if (modulesArray.length <= increment) {
-      console.log("done");
-      return;
-    } else {
-      CMDR_renderAllRowSettings(modulesArray, cb, increment);
-    }
-  });
+var _CMDR_renderAllColumnSettings = _interopRequireDefault(require("../util/CMDR_renderAllColumnSettings"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default() {
+  var columns = document.querySelectorAll(".fl-col");
+  var i = 0;
+  (0, _CMDR_renderAllColumnSettings.default)(columns, CMDR_resetFn, i);
 }
+},{"../util/CMDR_renderAllColumnSettings":"scripts/util/CMDR_renderAllColumnSettings.js"}],"scripts/util/CMDR_renderAllModuleSettingsWithArgs.js":[function(require,module,exports) {
+"use strict";
 
-function CMDR_changeFn(inputName, inputValue) {
-  var form = document.querySelector(".fl-builder-settings-fields");
-  form.querySelectorAll("".concat(inputName)).forEach(function (input) {
-    input.value = inputValue;
-  });
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CMDR_renderAllModuleSettingsWithArgs;
 
-  FLBuilder._saveSettings();
-}
 /**
  *
  * @param {NODELIST} modulesArray list of nodes that will be looped through
@@ -281,8 +403,6 @@ function CMDR_changeFn(inputName, inputValue) {
  * @param {STRING} inputName name of input that should be changed
  * @param {STRING} newValue new value of input
  */
-
-
 function CMDR_renderAllModuleSettingsWithArgs(modulesArray, cb, increment, inputName, newValue) {
   var module = modulesArray[increment];
   increment++;
@@ -310,12 +430,29 @@ function CMDR_renderAllModuleSettingsWithArgs(modulesArray, cb, increment, input
     }
   });
 }
-/**
- * function to create a form to add arguments to a function.
- * @param {STRING} inputNameClass class name of the input youll get the input name from
- * @param {STRING} newValueClass class name of the input you put your new value in
- */
+},{}],"scripts/util/CMDR_changeFn.js":[function(require,module,exports) {
+"use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CMDR_changeFn;
+
+function CMDR_changeFn(inputName, inputValue) {
+  var form = document.querySelector(".fl-builder-settings-fields");
+  form.querySelectorAll("".concat(inputName)).forEach(function (input) {
+    input.value = inputValue;
+  });
+
+  FLBuilder._saveSettings();
+}
+},{}],"scripts/util/createArgForm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = createArgForm;
 
 function createArgForm(inputNameClass, newValueClass, fnToListenFor) {
   var container = document.createElement("div");
@@ -337,7 +474,66 @@ function createArgForm(inputNameClass, newValueClass, fnToListenFor) {
   submitButton.addEventListener("click", fnToListenFor);
   return;
 }
+},{}],"scripts/pallet-commands/initChangeAllModulesWithArgs.js":[function(require,module,exports) {
+"use strict";
 
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _CMDR_renderAllModuleSettingsWithArgs = _interopRequireDefault(require("../util/CMDR_renderAllModuleSettingsWithArgs"));
+
+var _CMDR_changeFn = _interopRequireDefault(require("../util/CMDR_changeFn"));
+
+var _createArgForm = _interopRequireDefault(require("../util/createArgForm"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default() {
+  (0, _createArgForm.default)("inputName", "toValue", changeAllModulesWithArgs);
+
+  function changeAllModulesWithArgs() {
+    var inputName = document.querySelector(".inputName").value;
+    var newValue = document.querySelector(".toValue").value;
+    var modules = document.querySelectorAll(".fl-module");
+    var i = 0;
+    (0, _CMDR_renderAllModuleSettingsWithArgs.default)(modules, _CMDR_changeFn.default, i, inputName, newValue);
+  }
+}
+},{"../util/CMDR_renderAllModuleSettingsWithArgs":"scripts/util/CMDR_renderAllModuleSettingsWithArgs.js","../util/CMDR_changeFn":"scripts/util/CMDR_changeFn.js","../util/createArgForm":"scripts/util/createArgForm.js"}],"scripts/open-palette.js":[function(require,module,exports) {
+"use strict";
+
+var _CMDR_resetFn = _interopRequireDefault(require("./pallet-commands/CMDR_resetFn"));
+
+var _CMD_marginsZero = _interopRequireDefault(require("./pallet-commands/CMD_marginsZero"));
+
+var _resetOpenModule = _interopRequireDefault(require("./pallet-commands/resetOpenModule"));
+
+var _resetAllModules = _interopRequireDefault(require("./pallet-commands/resetAllModules"));
+
+var _marginsZeroOpenModule = _interopRequireDefault(require("./pallet-commands/marginsZeroOpenModule"));
+
+var _marginZeroAllModules = _interopRequireDefault(require("./pallet-commands/marginZeroAllModules"));
+
+var _resetAllRows = _interopRequireDefault(require("./pallet-commands/resetAllRows"));
+
+var _resetText = _interopRequireDefault(require("./pallet-commands/resetText"));
+
+var _resetAllColumns = _interopRequireDefault(require("./pallet-commands/resetAllColumns"));
+
+var _initChangeAllModulesWithArgs = _interopRequireDefault(require("./pallet-commands/initChangeAllModulesWithArgs"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//COMMANDS
+
+/**
+ * function to create a form to add arguments to a function.
+ * @param {STRING} inputNameClass class name of the input youll get the input name from
+ * @param {STRING} newValueClass class name of the input you put your new value in
+ */
+//TODO add a remove argForm
 function createPalette() {
   var el = document.createElement("div");
   var searchInput = document.createElement("input");
@@ -357,97 +553,35 @@ function createPalette() {
 }
 
 var BBComander = {
-  hello: function hello() {
-    console.log("hello world");
-  },
-
   /**
    * resets the open settings form.
    * to my defaults {empty string or default text}
    * or the first
    * option in a select
    */
-  resetOpenModule: function resetOpenModule() {
-    document.querySelectorAll(".fl-builder-settings-fields input, \n        .fl-builder-settings-fields select ").forEach(function (input) {
-      if (input.tagName == "INPUT") {
-        if (input.type == "hidden") {
-          return;
-        }
-
-        input.value = " ";
-
-        if (input.classList.contains("text-full")) {
-          //looks for headings or small text
-          input.value = "default text";
-        }
-      } else {
-        if (input.name == "visibility_display") {
-          return;
-        }
-
-        var option = input.querySelector("option");
-        input.value = option.value;
-      }
-    });
-
-    FLBuilder._saveSettings();
-  },
+  resetOpenModule: _resetOpenModule.default,
 
   /**
    * resets all modules on a page to empty string or the first
    * option in a select
    */
-  resetAllModules: function resetAllModules() {
-    var modules = _toConsumableArray(document.querySelectorAll(".fl-module"));
-
-    var i = 0;
-    CMDR_renderAllModuleSettings(modules, _CMDR_resetFn.default, i);
-  },
-  marginsZeroOpenModule: function marginsZeroOpenModule() {
-    document.querySelectorAll(".fl-builder-settings-fields #fl-field-margin input[type=number]").forEach(function (input) {
-      console.log(input);
-      input.value = "0";
-    });
-
-    FLBuilder._saveSettings();
-  },
-  marginZeroAllModules: function marginZeroAllModules() {
-    var modules = _toConsumableArray(document.querySelectorAll(".fl-module"));
-
-    var i = 0;
-    CMDR_renderAllModuleSettings(modules, CMD_marginsZero, i);
-  },
-  resetText: function resetText() {
-    var iframe = document.querySelector(".fl-builder-settings-section-content .mce-edit-area iframe");
-    iframe.contentWindow.document.body.innerHTML = "";
-  },
-  resetAllColumns: function resetAllColumns() {
-    var columns = document.querySelectorAll(".fl-col");
-    var i = 0;
-    CMDR_renderAllColumnSettings(columns, _CMDR_resetFn.default, i);
-  },
-  resetAllRows: function resetAllRows() {
-    var rows = document.querySelectorAll(".fl-row");
-    var i = 0;
-    CMDR_renderAllRowSettings(rows, _CMDR_resetFn.default, i);
-  },
+  resetAllModules: _resetAllModules.default,
+  //Todo write documentation
+  marginsZeroOpenModule: _marginsZeroOpenModule.default,
+  //todo write documentation
+  marginZeroAllModules: _marginZeroAllModules.default,
+  resetText: _resetText.default,
+  //!this dont work
+  resetAllColumns: _resetAllColumns.default,
+  //Todo write documentation
+  resetAllRows: _resetAllRows.default,
 
   /**
    * start of 2 step functions
    * or
    * functions with arguments
    */
-  initChangeAllModulesWithArgs: function initChangeAllModulesWithArgs() {
-    createArgForm("inputName", "toValue", changeAllModulesWithArgs);
-
-    function changeAllModulesWithArgs() {
-      var inputName = document.querySelector(".inputName").value;
-      var newValue = document.querySelector(".toValue").value;
-      var modules = document.querySelectorAll(".fl-module");
-      var i = 0;
-      CMDR_renderAllModuleSettingsWithArgs(modules, CMDR_changeFn, i, inputName, newValue);
-    }
-  }
+  initChangeAllModulesWithArgs: _initChangeAllModulesWithArgs.default
 };
 
 function executeCommand() {
@@ -455,7 +589,7 @@ function executeCommand() {
   BBComander[input.value.toString()]();
 }
 
-var ALL_COMMANDS = ["thisNotACommand", "hello", "resetText", "marginZeroAllModules", "marginsZeroOpenModule", "resetAllModules", "resetOpenModule", "resetAllColumns", "resetAllRows", "initChangeAllModulesWithArgs"]; //this should eventually render select list like downshift
+var ALL_COMMANDS = ["resetText", "marginZeroAllModules", "marginsZeroOpenModule", "resetAllModules", "resetOpenModule", "resetAllColumns", "resetAllRows", "initChangeAllModulesWithArgs"]; //this should eventually render select list like downshift
 
 function showCommands() {
   var searchStr = this.value;
@@ -552,7 +686,7 @@ this is the parent function that calls everything
     return cleanupPalette(e);
   });
 })();
-},{"./pallet-commands/CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js"}],"scripts/commands.js":[function(require,module,exports) {
+},{"./pallet-commands/CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js","./pallet-commands/CMD_marginsZero":"scripts/pallet-commands/CMD_marginsZero.js","./pallet-commands/resetOpenModule":"scripts/pallet-commands/resetOpenModule.js","./pallet-commands/resetAllModules":"scripts/pallet-commands/resetAllModules.js","./pallet-commands/marginsZeroOpenModule":"scripts/pallet-commands/marginsZeroOpenModule.js","./pallet-commands/marginZeroAllModules":"scripts/pallet-commands/marginZeroAllModules.js","./pallet-commands/resetAllRows":"scripts/pallet-commands/resetAllRows.js","./pallet-commands/resetText":"scripts/pallet-commands/resetText.js","./pallet-commands/resetAllColumns":"scripts/pallet-commands/resetAllColumns.js","./pallet-commands/initChangeAllModulesWithArgs":"scripts/pallet-commands/initChangeAllModulesWithArgs.js"}],"scripts/commands.js":[function(require,module,exports) {
 var global = arguments[3];
 //noop
 (function () {
