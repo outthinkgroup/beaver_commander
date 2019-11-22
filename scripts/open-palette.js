@@ -239,6 +239,8 @@ const BBComander = {
   /**
    * resets the open settings form.
    * to my defaults {empty string or default text}
+   * or the first
+   * option in a select
    */
   resetOpenModule: function() {
     document
@@ -253,6 +255,7 @@ const BBComander = {
           }
           input.value = " ";
           if (input.classList.contains("text-full")) {
+            //looks for headings or small text
             input.value = "default text";
           }
         } else {
@@ -358,7 +361,7 @@ const ALL_COMMANDS = [
 
 //this should eventually render select list like downshift
 function showCommands() {
-  searchStr = this.value;
+  const searchStr = this.value;
   const searchedCMDs = ALL_COMMANDS.filter(cmd =>
     cmd.toLowerCase().includes(searchStr.toLowerCase())
   );
@@ -432,7 +435,7 @@ this is the parent function that calls everything
         }
       });
 
-      input.addEventListener("keydown", showCommands);
+      input.addEventListener("input", showCommands);
       window.addEventListener("click", e => removeListOnClick(e));
       executeBtn.addEventListener("click", executeCommand);
     } else {

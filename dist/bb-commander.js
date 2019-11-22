@@ -364,6 +364,8 @@ var BBComander = {
   /**
    * resets the open settings form.
    * to my defaults {empty string or default text}
+   * or the first
+   * option in a select
    */
   resetOpenModule: function resetOpenModule() {
     document.querySelectorAll(".fl-builder-settings-fields input, \n        .fl-builder-settings-fields select ").forEach(function (input) {
@@ -375,6 +377,7 @@ var BBComander = {
         input.value = " ";
 
         if (input.classList.contains("text-full")) {
+          //looks for headings or small text
           input.value = "default text";
         }
       } else {
@@ -455,7 +458,7 @@ function executeCommand() {
 var ALL_COMMANDS = ["thisNotACommand", "hello", "resetText", "marginZeroAllModules", "marginsZeroOpenModule", "resetAllModules", "resetOpenModule", "resetAllColumns", "resetAllRows", "initChangeAllModulesWithArgs"]; //this should eventually render select list like downshift
 
 function showCommands() {
-  searchStr = this.value;
+  var searchStr = this.value;
   var searchedCMDs = ALL_COMMANDS.filter(function (cmd) {
     return cmd.toLowerCase().includes(searchStr.toLowerCase());
   });
@@ -522,7 +525,7 @@ this is the parent function that calls everything
           return;
         }
       });
-      input.addEventListener("keydown", showCommands);
+      input.addEventListener("input", showCommands);
       window.addEventListener("click", function (e) {
         return removeListOnClick(e);
       });
