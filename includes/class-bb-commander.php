@@ -48,6 +48,10 @@ if(!class_exists('BB_Commander')){
             'label' => __( 'opens the settings of the hovered module and goes to advanced tab', 'my-plugin'),
             'keyCode' => 'a'
           );
+          $shortcuts['openColAdvancedTab'] = array(
+            'label' => __( 'opens the settings of the hovered Column and goes to advanced tab', 'my-plugin'),
+            'keyCode' => 'A'
+          );
           return $shortcuts;
       });
     }

@@ -125,3 +125,48 @@
   }
   window.addEventListener("load", shortcutHookColumn);
 })();
+
+(function() {
+  function openColAdvancedTab() {
+    const module = document.querySelector(".fl-module-overlay");
+    if (!module) {
+      return null;
+    }
+    const col = module.closest(".fl-col");
+    const nodeId = col.dataset.node;
+    const global = module.closest(".fl-block-overlay-global") ? true : false;
+
+    FLBuilderSettingsForms.render(
+      {
+        id: "col",
+        nodeId: nodeId,
+        className: "fl-builder-col-settings",
+        attrs: 'data-node="' + nodeId + '"',
+        buttons:
+          !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi
+            ? ["save-as"]
+            : [],
+        badges: global ? [FLBuilderStrings.global] : [],
+        settings: FLBuilderSettingsConfig.nodes[nodeId],
+        preview: {
+          type: "col"
+        }
+      },
+      function() {
+        //makes the advanced tab open
+        const settings = document.querySelector(".fl-builder-module-settings");
+        const tabBar = settings.querySelector(".fl-builder-settings-tabs");
+        tabBar.querySelector(".fl-active").classList.remove("fl-active");
+
+        const advancedTab = tabBar.querySelector(
+          `[href = "#fl-builder-settings-tab-advanced"]`
+        );
+        advancedTab.classList.add("fl-active");
+      }
+    );
+  }
+  function shortcutHookColumn() {
+    FLBuilder.addHook("openColAdvancedTab", openColAdvancedTab);
+  }
+  window.addEventListener("load", shortcutHookColumn);
+})();
