@@ -51,15 +51,15 @@ const BBComander = {
    * option in a select
    */
   resetAllModules,
-  //Todo write documentation
+  //TODO write documentation
   marginsZeroOpenModule,
-  //todo write documentation
+  //TODO write documentation
   marginZeroAllModules,
 
   resetText, //!this dont work
 
   resetAllColumns,
-  //Todo write documentation
+  //TODO write documentation
   resetAllRows,
 
   /**

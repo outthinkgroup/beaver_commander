@@ -566,14 +566,14 @@ var BBComander = {
    * option in a select
    */
   resetAllModules: _resetAllModules.default,
-  //Todo write documentation
+  //TODO write documentation
   marginsZeroOpenModule: _marginsZeroOpenModule.default,
-  //todo write documentation
+  //TODO write documentation
   marginZeroAllModules: _marginZeroAllModules.default,
   resetText: _resetText.default,
   //!this dont work
   resetAllColumns: _resetAllColumns.default,
-  //Todo write documentation
+  //TODO write documentation
   resetAllRows: _resetAllRows.default,
 
   /**
@@ -688,7 +688,7 @@ this is the parent function that calls everything
 })();
 },{"./pallet-commands/CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js","./pallet-commands/CMD_marginsZero":"scripts/pallet-commands/CMD_marginsZero.js","./pallet-commands/resetOpenModule":"scripts/pallet-commands/resetOpenModule.js","./pallet-commands/resetAllModules":"scripts/pallet-commands/resetAllModules.js","./pallet-commands/marginsZeroOpenModule":"scripts/pallet-commands/marginsZeroOpenModule.js","./pallet-commands/marginZeroAllModules":"scripts/pallet-commands/marginZeroAllModules.js","./pallet-commands/resetAllRows":"scripts/pallet-commands/resetAllRows.js","./pallet-commands/resetText":"scripts/pallet-commands/resetText.js","./pallet-commands/resetAllColumns":"scripts/pallet-commands/resetAllColumns.js","./pallet-commands/initChangeAllModulesWithArgs":"scripts/pallet-commands/initChangeAllModulesWithArgs.js"}],"scripts/commands.js":[function(require,module,exports) {
 var global = arguments[3];
-//noop
+// OPEN SETTINGS COMMANDS
 (function () {
   function openParentColumnSettings() {
     var module = document.querySelector(".fl-module-overlay");
@@ -767,6 +767,41 @@ var global = arguments[3];
     // Register a hook listener using the key that you registered
     // your shortcut with along with the function it should fire.
     FLBuilder.addHook("openColumnSettings", openColumnSettings);
+  }
+
+  window.addEventListener("load", shortcutHookColumn);
+})();
+
+(function () {
+  function openModulesAdvancedTab() {
+    var module = document.querySelector(".fl-module-overlay").closest(".fl-module");
+    console.log(module);
+    var nodeId = module.dataset.node;
+    FLBuilderSettingsForms.render({
+      id: "".concat(module.dataset.type),
+      nodeId: nodeId,
+      className: "fl-builder-module-settings  fl-builder-".concat(module.dataset.type, "-settings"),
+      attrs: 'data-node="' + nodeId + "\" data-type=".concat(module.dataset.type, " novalidate=\"novalidate\" "),
+      buttons: ["save"],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      type: "module",
+      preview: {
+        type: "".concat(module.dataset.type)
+      }
+    }, function () {
+      //makes the advanced tab open
+      var settings = document.querySelector(".fl-builder-module-settings");
+      var tabBar = settings.querySelector(".fl-builder-settings-tabs");
+      tabBar.querySelector(".fl-active").classList.remove("fl-active");
+      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]");
+      advancedTab.classList.add("fl-active");
+    });
+  }
+
+  function shortcutHookColumn() {
+    // Register a hook listener using the key that you registered
+    // your shortcut with along with the function it should fire.
+    FLBuilder.addHook("openModulesAdvancedTab", openModulesAdvancedTab);
   }
 
   window.addEventListener("load", shortcutHookColumn);
