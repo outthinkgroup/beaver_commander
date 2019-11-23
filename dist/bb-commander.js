@@ -607,19 +607,7 @@ var BBCommander = {
 function executeCommand() {
   var input = document.querySelector(".bb_cmdr_palette .bb_cmdr_container input");
   BBCommander[input.value.toString()]();
-} //TODO use Object.keys(BBCommander) insead/*
-
-/*const ALL_COMMANDS = [
-  "resetText",
-  "marginZeroAllModules",
-  "marginsZeroOpenModule",
-  "resetAllModules",
-  "resetOpenModule",
-  "resetAllColumns",
-  "resetAllRows",
-  "initChangeAllModulesWithArgs"
-]; */
-
+}
 
 var ALL_COMMANDS = Object.keys(BBCommander); //this should eventually render select list like downshift
 
@@ -634,7 +622,8 @@ function showCommands() {
   }).join("");
   var ul = document.querySelector(".bb_cmdr_palette ul");
   ul.innerHTML = list;
-}
+} //TODO change when made a select list
+
 
 function removeList() {
   var list = document.querySelectorAll(".bb_cmdr_palette li");
