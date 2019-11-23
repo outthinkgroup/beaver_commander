@@ -22,19 +22,21 @@ function createPalette() {
   const el = document.createElement("div");
   const searchInput = document.createElement("input");
   const executeBtn = document.createElement("BUTTON");
-  const ul = document.createElement("UL");
+  const datalist = document.createElement("DATALIST");
 
   el.classList.add("bb_cmdr_palette");
   executeBtn.setAttribute("type", "button");
   searchInput.setAttribute("type", "text");
+  searchInput.setAttribute("list", "commands");
+  datalist.id = "commands";
   executeBtn.innerText = "Execute";
-  const container = document.createElement("div");
+  const container = document.createElement("form");
   container.classList.add("bb_cmdr_container");
 
   container.appendChild(searchInput);
   container.appendChild(executeBtn);
   el.appendChild(container);
-  el.appendChild(ul);
+  el.appendChild(datalist);
   document.body.appendChild(el);
 }
 
@@ -81,7 +83,8 @@ const BBCommander = {
   initChangeAllModulesWithArgs
 };
 
-function executeCommand() {
+function executeCommand(e) {
+  e.preventDefault();
   const input = document.querySelector(
     ".bb_cmdr_palette .bb_cmdr_container input"
   );
@@ -101,17 +104,15 @@ function showCommands() {
 
   const list = searchedCMDs
     .map(cmd => {
-      const item = `<li data-command="${cmd}" >${cmd}</li>`;
+      const item = `<option value="${cmd}" >${cmd}</option>`;
       return item;
     })
     .join("");
-  const ul = document.querySelector(".bb_cmdr_palette ul");
-  ul.innerHTML = list;
+  const datalist = document.querySelector(".bb_cmdr_palette datalist");
+  datalist.innerHTML = list;
 }
-//TODO change when made a select list
+
 function removeList() {
-  const list = document.querySelectorAll(".bb_cmdr_palette li");
-  list.forEach(li => li.parentNode.removeChild(li));
   document.querySelector(".bb_cmdr_palette input").value = "";
 }
 
@@ -122,7 +123,7 @@ function removeListOnClick(e) {
   ) {
     return;
   }
-  removeList();
+  //removeList();
 }
 document.body.setAttribute("data-commanderstate", "closed");
 
@@ -156,20 +157,13 @@ this is the parent function that calls everything
       const input = document.querySelector(
         ".bb_cmdr_palette .bb_cmdr_container input"
       );
-      const ul = document.querySelector(".bb_cmdr_palette ul");
-      ul.addEventListener("click", function(e) {
-        if (e.target.tagName === "LI") {
-          const command = e.target.dataset.command;
-          const input = document.querySelector(".bb_cmdr_palette input");
-          input.value = command;
-          executeCommand();
-          removeList();
-          //TODO addcleanup pallete if
-          return;
-        }
-      });
+      const form = document.querySelector(
+        ".bb_cmdr_palette .bb_cmdr_container"
+      );
+
       input.addEventListener("focus", showCommands);
       input.addEventListener("input", showCommands);
+      form.addEventListener("submit", executeCommand);
       window.addEventListener("click", e => removeListOnClick(e));
       executeBtn.addEventListener("click", executeCommand);
     } else {

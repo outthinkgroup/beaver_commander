@@ -548,17 +548,19 @@ function createPalette() {
   var el = document.createElement("div");
   var searchInput = document.createElement("input");
   var executeBtn = document.createElement("BUTTON");
-  var ul = document.createElement("UL");
+  var datalist = document.createElement("DATALIST");
   el.classList.add("bb_cmdr_palette");
   executeBtn.setAttribute("type", "button");
   searchInput.setAttribute("type", "text");
+  searchInput.setAttribute("list", "commands");
+  datalist.id = "commands";
   executeBtn.innerText = "Execute";
-  var container = document.createElement("div");
+  var container = document.createElement("form");
   container.classList.add("bb_cmdr_container");
   container.appendChild(searchInput);
   container.appendChild(executeBtn);
   el.appendChild(container);
-  el.appendChild(ul);
+  el.appendChild(datalist);
   document.body.appendChild(el);
 }
 
@@ -604,7 +606,8 @@ var BBCommander = {
   initChangeAllModulesWithArgs: _initChangeAllModulesWithArgs.default
 };
 
-function executeCommand() {
+function executeCommand(e) {
+  e.preventDefault();
   var input = document.querySelector(".bb_cmdr_palette .bb_cmdr_container input");
   BBCommander[input.value.toString()]();
 }
@@ -617,28 +620,22 @@ function showCommands() {
     return searchStr === "" || cmd.toLowerCase().includes(searchStr.toLowerCase());
   });
   var list = searchedCMDs.map(function (cmd) {
-    var item = "<li data-command=\"".concat(cmd, "\" >").concat(cmd, "</li>");
+    var item = "<option value=\"".concat(cmd, "\" >").concat(cmd, "</option>");
     return item;
   }).join("");
-  var ul = document.querySelector(".bb_cmdr_palette ul");
-  ul.innerHTML = list;
-} //TODO change when made a select list
-
+  var datalist = document.querySelector(".bb_cmdr_palette datalist");
+  datalist.innerHTML = list;
+}
 
 function removeList() {
-  var list = document.querySelectorAll(".bb_cmdr_palette li");
-  list.forEach(function (li) {
-    return li.parentNode.removeChild(li);
-  });
   document.querySelector(".bb_cmdr_palette input").value = "";
 }
 
 function removeListOnClick(e) {
   if (e.target.closest(".bb_cmdr_palette") || e.target.classList.contains(".bb_cmdr_palette")) {
     return;
-  }
+  } //removeList();
 
-  removeList();
 }
 
 document.body.setAttribute("data-commanderstate", "closed");
@@ -667,22 +664,10 @@ this is the parent function that calls everything
       document.body.dataset.commanderstate = "open";
       var executeBtn = document.querySelector(".bb_cmdr_palette .bb_cmdr_container button");
       var input = document.querySelector(".bb_cmdr_palette .bb_cmdr_container input");
-      var ul = document.querySelector(".bb_cmdr_palette ul");
-      ul.addEventListener("click", function (e) {
-        if (e.target.tagName === "LI") {
-          var command = e.target.dataset.command;
-
-          var _input = document.querySelector(".bb_cmdr_palette input");
-
-          _input.value = command;
-          executeCommand();
-          removeList(); //TODO addcleanup pallete if
-
-          return;
-        }
-      });
+      var form = document.querySelector(".bb_cmdr_palette .bb_cmdr_container");
       input.addEventListener("focus", showCommands);
       input.addEventListener("input", showCommands);
+      form.addEventListener("submit", executeCommand);
       window.addEventListener("click", function (e) {
         return removeListOnClick(e);
       });
