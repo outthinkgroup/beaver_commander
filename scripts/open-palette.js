@@ -87,8 +87,8 @@ function executeCommand() {
   );
   BBCommander[input.value.toString()]();
 }
-
-const ALL_COMMANDS = [
+//TODO use Object.keys(BBCommander) insead/*
+/*const ALL_COMMANDS = [
   "resetText",
   "marginZeroAllModules",
   "marginsZeroOpenModule",
@@ -97,7 +97,8 @@ const ALL_COMMANDS = [
   "resetAllColumns",
   "resetAllRows",
   "initChangeAllModulesWithArgs"
-];
+]; */
+const ALL_COMMANDS = Object.keys(BBCommander);
 
 //this should eventually render select list like downshift
 function showCommands() {

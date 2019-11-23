@@ -253,6 +253,8 @@ exports.default = _default;
 
 var _CMDR_renderAllModulesSettings = _interopRequireDefault(require("../util/CMDR_renderAllModulesSettings"));
 
+var _CMDR_resetFn = _interopRequireDefault(require("./CMDR_resetFn"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -267,9 +269,9 @@ function _default() {
   var modules = _toConsumableArray(document.querySelectorAll(".fl-module"));
 
   var i = 0;
-  (0, _CMDR_renderAllModulesSettings.default)(modules, CMDR_resetFn, i);
+  (0, _CMDR_renderAllModulesSettings.default)(modules, _CMDR_resetFn.default, i);
 }
-},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js"}],"scripts/pallet-commands/marginsZeroOpenModule.js":[function(require,module,exports) {
+},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js","./CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js"}],"scripts/pallet-commands/marginsZeroOpenModule.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -294,6 +296,8 @@ exports.default = _default;
 
 var _CMDR_renderAllModulesSettings = _interopRequireDefault(require("../util/CMDR_renderAllModulesSettings"));
 
+var _CMD_marginsZero = _interopRequireDefault(require("./CMD_marginsZero"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
@@ -308,9 +312,9 @@ function _default() {
   var modules = _toConsumableArray(document.querySelectorAll(".fl-module"));
 
   var i = 0;
-  (0, _CMDR_renderAllModulesSettings.default)(modules, CMD_marginsZero, i);
+  (0, _CMDR_renderAllModulesSettings.default)(modules, _CMD_marginsZero.default, i);
 }
-},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js"}],"scripts/pallet-commands/resetAllRows.js":[function(require,module,exports) {
+},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js","./CMD_marginsZero":"scripts/pallet-commands/CMD_marginsZero.js"}],"scripts/pallet-commands/resetAllRows.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -318,12 +322,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = _default;
 
+var _CMDR_resetFn = _interopRequireDefault(require("./CMDR_resetFn"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _default() {
   var rows = document.querySelectorAll(".fl-row");
   var i = 0;
-  CMDR_renderAllRowSettings(rows, CMDR_resetFn, i);
+  CMDR_renderAllRowSettings(rows, _CMDR_resetFn.default, i);
 }
-},{}],"scripts/pallet-commands/resetText.js":[function(require,module,exports) {
+},{"./CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js"}],"scripts/pallet-commands/resetText.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -378,6 +386,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = _default;
 
+var _CMDR_resetFn = _interopRequireDefault(require("./CMDR_resetFn"));
+
 var _CMDR_renderAllColumnSettings = _interopRequireDefault(require("../util/CMDR_renderAllColumnSettings"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -385,9 +395,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function _default() {
   var columns = document.querySelectorAll(".fl-col");
   var i = 0;
-  (0, _CMDR_renderAllColumnSettings.default)(columns, CMDR_resetFn, i);
+  (0, _CMDR_renderAllColumnSettings.default)(columns, _CMDR_resetFn.default, i);
 }
-},{"../util/CMDR_renderAllColumnSettings":"scripts/util/CMDR_renderAllColumnSettings.js"}],"scripts/util/CMDR_renderAllModuleSettingsWithArgs.js":[function(require,module,exports) {
+},{"./CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js","../util/CMDR_renderAllColumnSettings":"scripts/util/CMDR_renderAllColumnSettings.js"}],"scripts/util/CMDR_renderAllModuleSettingsWithArgs.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -597,9 +607,21 @@ var BBCommander = {
 function executeCommand() {
   var input = document.querySelector(".bb_cmdr_palette .bb_cmdr_container input");
   BBCommander[input.value.toString()]();
-}
+} //TODO use Object.keys(BBCommander) insead/*
 
-var ALL_COMMANDS = ["resetText", "marginZeroAllModules", "marginsZeroOpenModule", "resetAllModules", "resetOpenModule", "resetAllColumns", "resetAllRows", "initChangeAllModulesWithArgs"]; //this should eventually render select list like downshift
+/*const ALL_COMMANDS = [
+  "resetText",
+  "marginZeroAllModules",
+  "marginsZeroOpenModule",
+  "resetAllModules",
+  "resetOpenModule",
+  "resetAllColumns",
+  "resetAllRows",
+  "initChangeAllModulesWithArgs"
+]; */
+
+
+var ALL_COMMANDS = Object.keys(BBCommander); //this should eventually render select list like downshift
 
 function showCommands() {
   var searchStr = this.value;
