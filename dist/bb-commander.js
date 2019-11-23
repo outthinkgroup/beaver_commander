@@ -552,7 +552,7 @@ function createPalette() {
   document.body.appendChild(el);
 }
 
-var BBComander = {
+var BBCommander = {
   /**
    * resets the open settings form.
    * to my defaults {empty string or default text}
@@ -566,14 +566,24 @@ var BBComander = {
    * option in a select
    */
   resetAllModules: _resetAllModules.default,
-  //TODO write documentation
+
+  /*
+   open modules will have 0 margins 
+  */
   marginsZeroOpenModule: _marginsZeroOpenModule.default,
-  //TODO write documentation
+
+  /**
+   *  All modules will have 0 margins
+   */
   marginZeroAllModules: _marginZeroAllModules.default,
   resetText: _resetText.default,
   //!this dont work
   resetAllColumns: _resetAllColumns.default,
-  //TODO write documentation
+
+  /**
+   * resets all rows on a page to empty string or the first
+   * option in a select
+   */
   resetAllRows: _resetAllRows.default,
 
   /**
@@ -586,7 +596,7 @@ var BBComander = {
 
 function executeCommand() {
   var input = document.querySelector(".bb_cmdr_palette .bb_cmdr_container input");
-  BBComander[input.value.toString()]();
+  BBCommander[input.value.toString()]();
 }
 
 var ALL_COMMANDS = ["resetText", "marginZeroAllModules", "marginsZeroOpenModule", "resetAllModules", "resetOpenModule", "resetAllColumns", "resetAllRows", "initChangeAllModulesWithArgs"]; //this should eventually render select list like downshift
@@ -594,7 +604,7 @@ var ALL_COMMANDS = ["resetText", "marginZeroAllModules", "marginsZeroOpenModule"
 function showCommands() {
   var searchStr = this.value;
   var searchedCMDs = ALL_COMMANDS.filter(function (cmd) {
-    return cmd.toLowerCase().includes(searchStr.toLowerCase());
+    return searchStr === "" || cmd.toLowerCase().includes(searchStr.toLowerCase());
   });
   var list = searchedCMDs.map(function (cmd) {
     var item = "<li data-command=\"".concat(cmd, "\" >").concat(cmd, "</li>");
@@ -655,10 +665,12 @@ this is the parent function that calls everything
 
           _input.value = command;
           executeCommand();
-          removeList();
+          removeList(); //TODO addcleanup pallete if
+
           return;
         }
       });
+      input.addEventListener("focus", showCommands);
       input.addEventListener("input", showCommands);
       window.addEventListener("click", function (e) {
         return removeListOnClick(e);

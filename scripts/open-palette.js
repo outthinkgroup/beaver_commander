@@ -38,7 +38,7 @@ function createPalette() {
   document.body.appendChild(el);
 }
 
-const BBComander = {
+const BBCommander = {
   /**
    * resets the open settings form.
    * to my defaults {empty string or default text}
@@ -46,20 +46,31 @@ const BBComander = {
    * option in a select
    */
   resetOpenModule,
+
   /**
    * resets all modules on a page to empty string or the first
    * option in a select
    */
   resetAllModules,
-  //TODO write documentation
+
+  /*
+   open modules will have 0 margins 
+  */
   marginsZeroOpenModule,
-  //TODO write documentation
+
+  /**
+   *  All modules will have 0 margins
+   */
   marginZeroAllModules,
 
   resetText, //!this dont work
 
   resetAllColumns,
-  //TODO write documentation
+
+  /**
+   * resets all rows on a page to empty string or the first
+   * option in a select
+   */
   resetAllRows,
 
   /**
@@ -74,7 +85,7 @@ function executeCommand() {
   const input = document.querySelector(
     ".bb_cmdr_palette .bb_cmdr_container input"
   );
-  BBComander[input.value.toString()]();
+  BBCommander[input.value.toString()]();
 }
 
 const ALL_COMMANDS = [
@@ -91,9 +102,11 @@ const ALL_COMMANDS = [
 //this should eventually render select list like downshift
 function showCommands() {
   const searchStr = this.value;
-  const searchedCMDs = ALL_COMMANDS.filter(cmd =>
-    cmd.toLowerCase().includes(searchStr.toLowerCase())
-  );
+  const searchedCMDs = ALL_COMMANDS.filter(cmd => {
+    return (
+      searchStr === "" || cmd.toLowerCase().includes(searchStr.toLowerCase())
+    );
+  });
 
   const list = searchedCMDs
     .map(cmd => {
@@ -160,10 +173,11 @@ this is the parent function that calls everything
           input.value = command;
           executeCommand();
           removeList();
+          //TODO addcleanup pallete if
           return;
         }
       });
-
+      input.addEventListener("focus", showCommands);
       input.addEventListener("input", showCommands);
       window.addEventListener("click", e => removeListOnClick(e));
       executeBtn.addEventListener("click", executeCommand);
