@@ -1,3 +1,5 @@
+import { cleanupPalette } from "../open-palette";
+
 export default function createArgForm(
   inputNameClass,
   newValueClass,
@@ -24,6 +26,9 @@ export default function createArgForm(
   const palette = document.querySelector(".bb_cmdr_palette");
   palette.appendChild(container);
 
-  submitButton.addEventListener("click", fnToListenFor);
+  submitButton.addEventListener("click", () => {
+    fnToListenFor();
+    cleanupPalette();
+  });
   return;
 }

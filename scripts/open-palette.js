@@ -9,6 +9,7 @@ import resetAllRows from "./pallet-commands/resetAllRows";
 import resetText from "./pallet-commands/resetText";
 import resetAllColumns from "./pallet-commands/resetAllColumns";
 import initChangeAllModulesWithArgs from "./pallet-commands/initChangeAllModulesWithArgs";
+import createArgForm from "./util/createArgForm";
 
 /**
  * function to create a form to add arguments to a function.
@@ -39,6 +40,12 @@ function createPalette() {
   el.appendChild(datalist);
   document.body.appendChild(el);
 }
+function hideCommandsSearch() {
+  //hides the command search and execute button
+  document
+    .querySelector(".bb_cmdr_container")
+    .style.setProperty("display", "none");
+}
 
 const BBCommander = {
   /**
@@ -50,7 +57,8 @@ const BBCommander = {
   reset_Open_Module: {
     title: "reset Open Modules",
     fn: resetOpenModule,
-    description: "the open module settings input put will be set to a default"
+    description: "the open module settings input put will be set to a default",
+    hasArgs: false
   },
 
   /**
@@ -60,7 +68,8 @@ const BBCommander = {
   reset_All_Modules: {
     title: "Reset All Modules",
     description: "every module settings input put will be set to a default",
-    fn: resetAllModules
+    fn: resetAllModules,
+    hasArgs: false
   },
 
   /*
@@ -69,7 +78,8 @@ const BBCommander = {
   margins_Zero_Open_Module: {
     title: "Zero Margin Open Module",
     description: "the open module margins will be set to zero",
-    fn: marginsZeroOpenModule
+    fn: marginsZeroOpenModule,
+    hasArgs: false
   },
 
   /**
@@ -78,7 +88,8 @@ const BBCommander = {
   marginZeroAllModules: {
     title: "Zero Margin All Modules",
     fn: marginZeroAllModules,
-    description: "all modules margins will be set to zero"
+    description: "all modules margins will be set to zero",
+    hasArgs: false
   },
 
   // resetText, //!this dont work */
@@ -86,7 +97,8 @@ const BBCommander = {
   resetAllColumns: {
     title: "Reset All Columns",
     fn: resetAllColumns,
-    description: "every column settings input put will be set to a default"
+    description: "every column settings input put will be set to a default",
+    hasArgs: false
   },
 
   /**
@@ -96,7 +108,8 @@ const BBCommander = {
   resetAllRows: {
     title: "Reset All Rows",
     fn: resetAllRows,
-    description: "every rows settings input put will be set to a default"
+    description: "every rows settings input put will be set to a default",
+    hasArgs: false
   },
 
   /**
@@ -108,7 +121,8 @@ const BBCommander = {
     title: "Change All Modules with Custom Args",
     description:
       "give a selector and what value the input you select should have",
-    fn: initChangeAllModulesWithArgs
+    fn: initChangeAllModulesWithArgs,
+    hasArgs: true
   }
 };
 
@@ -122,7 +136,13 @@ function executeCommand(e) {
     cmd => BBCommander[cmd].title === input.value
   );
 
-  BBCommander[selectedCommand].fn();
+  if (BBCommander[selectedCommand].hasArgs) {
+    hideCommandsSearch();
+    createArgForm("inputName", "toValue", BBCommander[selectedCommand].fn);
+  } else {
+    BBCommander[selectedCommand].fn();
+    cleanupPalette();
+  }
 }
 
 const ALL_COMMANDS = Object.keys(BBCommander).map(key => ({
@@ -165,18 +185,21 @@ function removeListOnClick(e) {
 }
 document.body.setAttribute("data-commanderstate", "closed");
 
-function cleanupPalette(e) {
+export function cleanupPalette() {
+  const palette = document.querySelector(".bb_cmdr_palette");
+  if (palette) {
+    palette.parentElement.removeChild(palette);
+  }
+  document.body.setAttribute("data-commanderstate", "closed");
+}
+function cleanupPaletteOnExit(e) {
   if (e.target.classList.contains("fl-builder-button-primary")) {
     if (
       e.target.dataset.action === "publish" ||
       e.target.dataset.action === "draft" ||
       e.target.dataset.action === "discard"
     ) {
-      document.body.dataset.commanderstate = "closed";
-      const palette = document.querySelector(".bb_cmdr_palette");
-      if (palette) {
-        palette.parentElement.removeChild(palette);
-      }
+      cleanupPalette();
     }
   }
 }
@@ -219,5 +242,5 @@ this is the parent function that calls everything
     FLBuilder.addHook("openCommandPalette", openCommandPalette);
   }
   window.addEventListener("load", startCommander);
-  window.addEventListener("click", e => cleanupPalette(e));
+  window.addEventListener("click", e => cleanupPaletteOnExit(e));
 })();
