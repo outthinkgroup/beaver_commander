@@ -528,11 +528,14 @@ function createArgForm(inputNameClass, newValueClass, fnToListenFor) {
   var inputName = document.createElement("input");
   var inputValue = document.createElement("input");
   var submitButton = document.createElement("BUTTON");
+  container.classList.add("args-container");
   inputName.classList.add(inputNameClass);
   inputValue.classList.add(newValueClass);
   submitButton.classList.add("submit-args-button");
   inputName.setAttribute("placeholder", "inputs name");
+  inputName.setAttribute("type", "text");
   inputValue.setAttribute("placeholder", "new value");
+  inputValue.setAttribute("type", "text");
   submitButton.setAttribute("type", "button");
   submitButton.innerText = "RUN";
   container.appendChild(inputName);

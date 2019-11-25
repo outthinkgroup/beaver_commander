@@ -12,7 +12,8 @@
 .bb_cmdr_palette * {
   box-sizing: inherit;
 }
-.bb_cmdr_palette .bb_cmdr_container {
+.bb_cmdr_palette .bb_cmdr_container,
+.bb_cmdr_palette .args-container {
   height: 40px;
   display: flex;
   justify-content: space-around;
@@ -27,6 +28,9 @@
 .bb_cmdr_palette input[type=text]:hover, .bb_cmdr_palette input[type=text]:active, .bb_cmdr_palette input[type=text]:focus {
   background: #fff;
   outline: none;
+}
+.bb_cmdr_palette .args-container input[type=text]:nth-child(2) {
+  margin-left: 5px;
 }
 .bb_cmdr_palette button {
   margin-left: 10px;

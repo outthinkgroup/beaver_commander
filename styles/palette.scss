@@ -10,13 +10,15 @@
   top: 44px;
   left: 10vw;
   background: #efefef;
-  .bb_cmdr_container {
+  .bb_cmdr_container,
+  .args-container {
     height: 40px;
     display: flex;
     justify-content: space-around;
     width: 100%;
     margin: 0;
   }
+
   input[type="text"] {
     width: 100%;
     background: white;
@@ -26,6 +28,11 @@
     &:focus {
       background: #fff;
       outline: none;
+    }
+  }
+  .args-container input[type="text"] {
+    &:nth-child(2) {
+      margin-left: 5px;
     }
   }
   button {
