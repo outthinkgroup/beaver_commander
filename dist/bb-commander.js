@@ -690,8 +690,9 @@ var ALL_COMMANDS = Object.keys(BBCommander).map(function (key) {
 function showCommands() {
   var searchStr = this.value;
   var searchedCMDs = ALL_COMMANDS.filter(function (_ref) {
-    var title = _ref.title;
-    return searchStr === "" || title.toLowerCase().includes(searchStr.toLowerCase());
+    var title = _ref.title,
+        description = _ref.description;
+    return searchStr === "" || title.toLowerCase().includes(searchStr.toLowerCase()) || description.toLowerCase().includes(searchStr.toLowerCase());
   });
   var list = searchedCMDs.map(function (cmd) {
     var item = "<option value=\"".concat(cmd.title, "\" >").concat(cmd.description, "</option>");

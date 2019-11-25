@@ -132,9 +132,11 @@ const ALL_COMMANDS = Object.keys(BBCommander).map(key => ({
 //this should eventually render select list like downshift
 function showCommands() {
   const searchStr = this.value;
-  const searchedCMDs = ALL_COMMANDS.filter(({ title }) => {
+  const searchedCMDs = ALL_COMMANDS.filter(({ title, description }) => {
     return (
-      searchStr === "" || title.toLowerCase().includes(searchStr.toLowerCase())
+      searchStr === "" ||
+      title.toLowerCase().includes(searchStr.toLowerCase()) ||
+      description.toLowerCase().includes(searchStr.toLowerCase())
     );
   });
 
