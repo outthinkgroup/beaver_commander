@@ -47,40 +47,69 @@ const BBCommander = {
    * or the first
    * option in a select
    */
-  resetOpenModule,
+  reset_Open_Module: {
+    title: "reset Open Modules",
+    fn: resetOpenModule,
+    description: "the open module settings input put will be set to a default"
+  },
 
   /**
    * resets all modules on a page to empty string or the first
    * option in a select
    */
-  resetAllModules,
+  reset_All_Modules: {
+    title: "Reset All Modules",
+    description: "every module settings input put will be set to a default",
+    fn: resetAllModules
+  },
 
   /*
    open modules will have 0 margins 
   */
-  marginsZeroOpenModule,
+  margins_Zero_Open_Module: {
+    title: "Zero Margin Open Module",
+    description: "the open module margins will be set to zero",
+    fn: marginsZeroOpenModule
+  },
 
   /**
    *  All modules will have 0 margins
    */
-  marginZeroAllModules,
+  marginZeroAllModules: {
+    title: "Zero Margin All Modules",
+    fn: marginZeroAllModules,
+    description: "all modules margins will be set to zero"
+  },
 
-  resetText, //!this dont work
+  // resetText, //!this dont work */
 
-  resetAllColumns,
+  resetAllColumns: {
+    title: "Reset All Columns",
+    fn: resetAllColumns,
+    description: "every column settings input put will be set to a default"
+  },
 
   /**
    * resets all rows on a page to empty string or the first
    * option in a select
    */
-  resetAllRows,
+  resetAllRows: {
+    title: "Reset All Rows",
+    fn: resetAllRows,
+    description: "every rows settings input put will be set to a default"
+  },
 
   /**
    * start of 2 step functions
    * or
    * functions with arguments
    */
-  initChangeAllModulesWithArgs
+  initChangeAllModulesWithArgs: {
+    title: "Change All Modules with Custom Args",
+    description:
+      "give a selector and what value the input you select should have",
+    fn: initChangeAllModulesWithArgs
+  }
 };
 
 function executeCommand(e) {
@@ -88,23 +117,30 @@ function executeCommand(e) {
   const input = document.querySelector(
     ".bb_cmdr_palette .bb_cmdr_container input"
   );
-  BBCommander[input.value.toString()]();
+  const commands = Object.keys(BBCommander);
+  const selectedCommand = commands.find(
+    cmd => BBCommander[cmd].title === input.value
+  );
+
+  BBCommander[selectedCommand].fn();
 }
 
-const ALL_COMMANDS = Object.keys(BBCommander);
+const ALL_COMMANDS = Object.keys(BBCommander).map(key => ({
+  ...BBCommander[key]
+}));
 
 //this should eventually render select list like downshift
 function showCommands() {
   const searchStr = this.value;
-  const searchedCMDs = ALL_COMMANDS.filter(cmd => {
+  const searchedCMDs = ALL_COMMANDS.filter(({ title }) => {
     return (
-      searchStr === "" || cmd.toLowerCase().includes(searchStr.toLowerCase())
+      searchStr === "" || title.toLowerCase().includes(searchStr.toLowerCase())
     );
   });
 
   const list = searchedCMDs
     .map(cmd => {
-      const item = `<option value="${cmd}" >${cmd}</option>`;
+      const item = `<option value="${cmd.title}" >${cmd.description}</option>`;
       return item;
     })
     .join("");

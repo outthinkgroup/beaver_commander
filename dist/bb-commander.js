@@ -572,7 +572,11 @@ var _initChangeAllModulesWithArgs = _interopRequireDefault(require("./pallet-com
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-//COMMANDS
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 /**
  * function to create a form to add arguments to a function.
@@ -607,56 +611,90 @@ var BBCommander = {
    * or the first
    * option in a select
    */
-  resetOpenModule: _resetOpenModule.default,
+  reset_Open_Module: {
+    title: "reset Open Modules",
+    fn: _resetOpenModule.default,
+    description: "the open module settings input put will be set to a default"
+  },
 
   /**
    * resets all modules on a page to empty string or the first
    * option in a select
    */
-  resetAllModules: _resetAllModules.default,
+  reset_All_Modules: {
+    title: "Reset All Modules",
+    description: "every module settings input put will be set to a default",
+    fn: _resetAllModules.default
+  },
 
   /*
    open modules will have 0 margins 
   */
-  marginsZeroOpenModule: _marginsZeroOpenModule.default,
+  margins_Zero_Open_Module: {
+    title: "Zero Margin Open Module",
+    description: "the open module margins will be set to zero",
+    fn: _marginsZeroOpenModule.default
+  },
 
   /**
    *  All modules will have 0 margins
    */
-  marginZeroAllModules: _marginZeroAllModules.default,
-  resetText: _resetText.default,
-  //!this dont work
-  resetAllColumns: _resetAllColumns.default,
+  marginZeroAllModules: {
+    title: "Zero Margin All Modules",
+    fn: _marginZeroAllModules.default,
+    description: "all modules margins will be set to zero"
+  },
+  // resetText, //!this dont work */
+  resetAllColumns: {
+    title: "Reset All Columns",
+    fn: _resetAllColumns.default,
+    description: "every column settings input put will be set to a default"
+  },
 
   /**
    * resets all rows on a page to empty string or the first
    * option in a select
    */
-  resetAllRows: _resetAllRows.default,
+  resetAllRows: {
+    title: "Reset All Rows",
+    fn: _resetAllRows.default,
+    description: "every rows settings input put will be set to a default"
+  },
 
   /**
    * start of 2 step functions
    * or
    * functions with arguments
    */
-  initChangeAllModulesWithArgs: _initChangeAllModulesWithArgs.default
+  initChangeAllModulesWithArgs: {
+    title: "Change All Modules with Custom Args",
+    description: "give a selector and what value the input you select should have",
+    fn: _initChangeAllModulesWithArgs.default
+  }
 };
 
 function executeCommand(e) {
   e.preventDefault();
   var input = document.querySelector(".bb_cmdr_palette .bb_cmdr_container input");
-  BBCommander[input.value.toString()]();
+  var commands = Object.keys(BBCommander);
+  var selectedCommand = commands.find(function (cmd) {
+    return BBCommander[cmd].title === input.value;
+  });
+  BBCommander[selectedCommand].fn();
 }
 
-var ALL_COMMANDS = Object.keys(BBCommander); //this should eventually render select list like downshift
+var ALL_COMMANDS = Object.keys(BBCommander).map(function (key) {
+  return _objectSpread({}, BBCommander[key]);
+}); //this should eventually render select list like downshift
 
 function showCommands() {
   var searchStr = this.value;
-  var searchedCMDs = ALL_COMMANDS.filter(function (cmd) {
-    return searchStr === "" || cmd.toLowerCase().includes(searchStr.toLowerCase());
+  var searchedCMDs = ALL_COMMANDS.filter(function (_ref) {
+    var title = _ref.title;
+    return searchStr === "" || title.toLowerCase().includes(searchStr.toLowerCase());
   });
   var list = searchedCMDs.map(function (cmd) {
-    var item = "<option value=\"".concat(cmd, "\" >").concat(cmd, "</option>");
+    var item = "<option value=\"".concat(cmd.title, "\" >").concat(cmd.description, "</option>");
     return item;
   }).join("");
   var datalist = document.querySelector(".bb_cmdr_palette datalist");
@@ -994,7 +1032,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52128" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62268" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
