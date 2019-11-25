@@ -314,7 +314,41 @@ function _default() {
   var i = 0;
   (0, _CMDR_renderAllModulesSettings.default)(modules, _CMD_marginsZero.default, i);
 }
-},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js","./CMD_marginsZero":"scripts/pallet-commands/CMD_marginsZero.js"}],"scripts/pallet-commands/resetAllRows.js":[function(require,module,exports) {
+},{"../util/CMDR_renderAllModulesSettings":"scripts/util/CMDR_renderAllModulesSettings.js","./CMD_marginsZero":"scripts/pallet-commands/CMD_marginsZero.js"}],"scripts/util/CMDR_renderAllRowSettings.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = CMDR_renderAllRowSettings;
+
+function CMDR_renderAllRowSettings(modulesArray, cb, increment) {
+  var module = modulesArray[increment];
+  increment++;
+  var nodeId = module.dataset.node;
+  FLBuilderSettingsForms.render({
+    id: "row",
+    nodeId: nodeId,
+    className: "fl-builder-col-settings",
+    attrs: 'data-node="' + nodeId + "\" ",
+    buttons: ["save"],
+    settings: FLBuilderSettingsConfig.nodes[nodeId],
+    preview: {
+      type: "row"
+    }
+  }, function () {
+    //recursively calls itself to loop through all the array in order
+    cb();
+
+    if (modulesArray.length <= increment) {
+      console.log("done");
+      return;
+    } else {
+      CMDR_renderAllRowSettings(modulesArray, cb, increment);
+    }
+  });
+}
+},{}],"scripts/pallet-commands/resetAllRows.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -324,14 +358,16 @@ exports.default = _default;
 
 var _CMDR_resetFn = _interopRequireDefault(require("./CMDR_resetFn"));
 
+var _CMDR_renderAllRowSettings = _interopRequireDefault(require("../util/CMDR_renderAllRowSettings"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _default() {
   var rows = document.querySelectorAll(".fl-row");
   var i = 0;
-  CMDR_renderAllRowSettings(rows, _CMDR_resetFn.default, i);
+  (0, _CMDR_renderAllRowSettings.default)(rows, _CMDR_resetFn.default, i);
 }
-},{"./CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js"}],"scripts/pallet-commands/resetText.js":[function(require,module,exports) {
+},{"./CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js","../util/CMDR_renderAllRowSettings":"scripts/util/CMDR_renderAllRowSettings.js"}],"scripts/pallet-commands/resetText.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -668,9 +704,6 @@ this is the parent function that calls everything
       input.addEventListener("focus", showCommands);
       input.addEventListener("input", showCommands);
       form.addEventListener("submit", executeCommand);
-      window.addEventListener("click", function (e) {
-        return removeListOnClick(e);
-      });
       executeBtn.addEventListener("click", executeCommand);
     } else {
       var palette = document.querySelector(".bb_cmdr_palette");

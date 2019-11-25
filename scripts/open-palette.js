@@ -164,7 +164,7 @@ this is the parent function that calls everything
       input.addEventListener("focus", showCommands);
       input.addEventListener("input", showCommands);
       form.addEventListener("submit", executeCommand);
-      window.addEventListener("click", e => removeListOnClick(e));
+
       executeBtn.addEventListener("click", executeCommand);
     } else {
       const palette = document.querySelector(".bb_cmdr_palette");
