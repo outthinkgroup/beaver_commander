@@ -592,7 +592,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
  * @param {STRING} inputNameClass class name of the input youll get the input name from
  * @param {STRING} newValueClass class name of the input you put your new value in
  */
-//TODO add a remove argForm
 function createPalette() {
   var el = document.createElement("div");
   var searchInput = document.createElement("input");
@@ -1066,7 +1065,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62268" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54049" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

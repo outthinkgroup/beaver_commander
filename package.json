@@ -4,8 +4,8 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "dev": "parcel bb-commander.js ",
-    "build": "parcel build bb-commander.js  "
+    "dev": "parcel bb-commander.js linked-styles.js",
+    "build": "parcel build bb-commander.js  linked-styles.js"
   },
   "devDependencies": {
     "parcel-bundler": "^1.12.3",

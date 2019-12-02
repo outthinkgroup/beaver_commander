@@ -17,8 +17,6 @@ import createArgForm from "./util/createArgForm";
  * @param {STRING} newValueClass class name of the input you put your new value in
  */
 
-//TODO add a remove argForm
-
 function createPalette() {
   const el = document.createElement("div");
   const searchInput = document.createElement("input");
