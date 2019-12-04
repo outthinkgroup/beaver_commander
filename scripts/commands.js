@@ -114,7 +114,8 @@
         const advancedTab = tabBar.querySelector(
           `[href = "#fl-builder-settings-tab-advanced"]`
         );
-        advancedTab.classList.add("fl-active");
+        //advancedTab.classList.add("fl-active");
+        advancedTab.click();
       }
     );
   }
@@ -154,14 +155,15 @@
       },
       function() {
         //makes the advanced tab open
-        const settings = document.querySelector(".fl-builder-module-settings");
+        const settings = document.querySelector(".fl-builder-settings");
         const tabBar = settings.querySelector(".fl-builder-settings-tabs");
         tabBar.querySelector(".fl-active").classList.remove("fl-active");
 
         const advancedTab = tabBar.querySelector(
           `[href = "#fl-builder-settings-tab-advanced"]`
         );
-        advancedTab.classList.add("fl-active");
+        //advancedTab.classList.add("fl-active");
+        advancedTab.click();
       }
     );
   }

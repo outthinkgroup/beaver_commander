@@ -34,7 +34,7 @@ let checkTimes = 0;
 function check() {
   if (
     document
-      .querySelector(".fl-builder-module-settings")
+      .querySelector(".fl-builder-settings")
       .classList.contains("fl-builder-custom-markup-settings")
   ) {
     setTimeout(() => {

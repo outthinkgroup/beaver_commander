@@ -905,8 +905,9 @@ var global = arguments[3];
       var settings = document.querySelector(".fl-builder-module-settings");
       var tabBar = settings.querySelector(".fl-builder-settings-tabs");
       tabBar.querySelector(".fl-active").classList.remove("fl-active");
-      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]");
-      advancedTab.classList.add("fl-active");
+      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]"); //advancedTab.classList.add("fl-active");
+
+      advancedTab.click();
     });
   }
 
@@ -943,11 +944,12 @@ var global = arguments[3];
       }
     }, function () {
       //makes the advanced tab open
-      var settings = document.querySelector(".fl-builder-module-settings");
+      var settings = document.querySelector(".fl-builder-settings");
       var tabBar = settings.querySelector(".fl-builder-settings-tabs");
       tabBar.querySelector(".fl-active").classList.remove("fl-active");
-      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]");
-      advancedTab.classList.add("fl-active");
+      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]"); //advancedTab.classList.add("fl-active");
+
+      advancedTab.click();
     });
   }
 
@@ -1065,7 +1067,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56633" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56848" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
