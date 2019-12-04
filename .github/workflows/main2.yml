@@ -1,0 +1,24 @@
+name: DEPLOY
+
+on: push
+
+jobs:
+  FTP-Deploy-Action:
+    name: FTP-Deploy-Action
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: FTP-Deploy-Action
+      uses: SamKirkland/FTP-Deploy-Action@2.0.0
+      with:
+        port: 22
+        method: sftp
+      env:
+        FTP_SERVER: 45.56.67.41
+        FTP_USERNAME: ${{ secrets.SERVER_USER }}
+        FTP_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
+        REMOTE_DIR: /srv/users/${{secrets.SERVER_USER}}/apps/dev/public/wp-content/plugins/bb_commander
+        ARGS: --delete
+        PORT: 22
+        METHOD: sftp
+       
