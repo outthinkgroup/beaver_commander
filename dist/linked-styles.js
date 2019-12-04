@@ -135,48 +135,36 @@ window listen for click on save-as button
             module type
 
 */
-function addCustomGlobalSettings(e) {
-  if (e.target.classList.contains("fl-builder-settings-save-as")) {
+function addSaveAsLinkedStyleBtn(e) {
+  console.log("heool");
+  console.log(e.target.classList);
+
+  if (e.target.classList.contains("fl-module-overlay")) {
     setTimeout(function () {
-      var saveButton = document.querySelector(".fl-builder-settings-save");
-      var form = saveButton.closest("[data-node]");
-      var node = form.dataset.node;
-      var editingElement = document.querySelector(".fl-module.fl-node-".concat(node));
+      console.log(document.querySelector(".fl-builder-settings"));
+      /* 
+      
+       
+      const form = saveButton.closest("[data-node]");
+      const node = form.dataset.node;
+      const editingElement = document.querySelector(
+        `.fl-module.fl-node-${node}`
+      );
       if (!editingElement) return;
-      var type = editingElement.dataset.type;
-      var tr = document.createElement("tr");
-      /*    */
-
-      var th = document.createElement("TH");
-      /* .classList.add("fl-field-label"); */
-
-      var td = document.createElement("td");
-      /* .classList.add("fl-field-control"); */
-
-      var checkbox = document.createElement("INPUT");
-      checkbox.setAttribute("type", "checkbox");
-      checkbox.setAttribute("name", "isLinkedParent");
-      var label = document.createElement("LABEL");
-      label.innerText = "Make Linked Parent Style";
-      tr.classList.add("fl-field");
-      td.classList.add("fl-field-control");
-      th.classList.add("fl-field-label");
-      th.appendChild(label);
-      td.appendChild(checkbox);
-      tr.appendChild(th);
-      tr.appendChild(td);
-      form.querySelector("tbody").appendChild(tr);
-      var isLinkedStyle = checkbox.checked;
-      form.addEventListener("click", function (e) {
+       const type = editingElement.dataset.type;
+       form.querySelector("tbody").appendChild(tr);
+      const isLinkedStyle = checkbox.checked;
+       form.addEventListener("click", function(e) {
         if (!isLinkedStyle && e.target !== saveButton) return;
-        var nameInput = form.querySelector('input[type="text"]');
-        var name = nameInput.value;
-        var settings = form.querySelector("input.fl-builder-settings-json").value;
-        var data = {
-          name: name,
-          type: type,
-          node: node,
-          settings: settings,
+        const nameInput = form.querySelector('input[type="text"]');
+        const name = nameInput.value;
+        const settings = form.querySelector("input.fl-builder-settings-json")
+          .value;
+        const data = {
+          name,
+          type,
+          node,
+          settings,
           action: "create_linked_parent"
         };
         fetch(WP.url, {
@@ -186,15 +174,13 @@ function addCustomGlobalSettings(e) {
           },
           credentials: "same-origin",
           body: toQueryString(data)
-        }).then(function (res) {
-          return console.log(res);
-        });
-      });
+        }).then(res => console.log(res));
+      }); */
     }, 1500);
   }
 }
 
-window.addEventListener("click", addCustomGlobalSettings);
+window.addEventListener("click", addSaveAsLinkedStyleBtn);
 
 var toQueryString = function toQueryString(data) {
   var urlSearchParams = new URLSearchParams(data);
@@ -229,7 +215,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54049" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56633" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

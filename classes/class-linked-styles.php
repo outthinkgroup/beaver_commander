@@ -5,26 +5,11 @@ if(!class_exists('Linked_Styles')){
       if(!get_option('parents_styles')){
         add_option('parents_styles');
       }
-      //var_dump(get_option('module_type'));
 
-      error_log('ran');
 
       add_filter('fl_builder_render_css', array( $this, 'add_fake_styles' ), 10, 3);
       add_filter('fl_builder_register_settings_form', array( $this, 'add_settings' ), 1010, 2  );
-      add_action('fl_builder_after_save_layout', function($post_id, $publish, $data){
-        $post_type = get_post_type($post_id);
-        if($post_type === 'fl-builder-template'){
-          $title = get_the_title($post_id);
-          foreach($data as $node){
-            $n = $node->node;
-
-            $type = get_option('module_type')[$title];
-            
-            $this->save_parents_styles($type, $n, $data, $title);
-            
-          }
-        }
-      },10,3);
+      
       add_action( 'wp_enqueue_scripts', function() {
         if ( class_exists('FLBuilderModel') && FLBuilderModel::is_builder_active() ) {
           wp_enqueue_script(
@@ -39,11 +24,11 @@ if(!class_exists('Linked_Styles')){
       });
 
       add_action('wp_ajax_create_linked_parent', array($this, 'create_linked_parent'));
-
-
  
 
     }
+
+
     function add_fake_styles( $css , $nodes, $global_settings) {
       //
       //ob_start();
@@ -146,9 +131,8 @@ if(!class_exists('Linked_Styles')){
       $name = $_POST['name'];
       $type = $_POST['type'];
       $node = $_POST['node'];
-      //var_dump($settings);
+      
       $this->save_parents_styles($type, $node, $settings, $name);
-      //var_dump(return_module_css( $type, $node, $settings ));
 
       die();
     }
@@ -156,28 +140,7 @@ if(!class_exists('Linked_Styles')){
   }
   new Linked_Styles();
 }
-/* 
-WORKFLOW
-create user template 
-  - mark it as parent
-add new module 
-  - select to inherit parents styles 
-  - and advanced tab stuff too 
 
-marking as a linkedParent
-  - save module settings to an array
-    - get_option?
-      - module name slugified is the key
-
-linking child to parent
-  - append to all modules settings form (see beaver notes)
-  - need to filter modules css to be the parents
-         * this filter gives access to css at the end dump all parent styles for each node * 
-    - 	add_filter('fl_builder_render_css', array( $this, 'uabb_extended_setting_css' ), 10, 3);
-	      function uabb_extended_setting_css( $css (all the css), $nodes:(all the rows cols and nodes), $global_settings(???)) {}
-
-
-*/
 
 function return_module_css($type, $id, $settings){
   $global_settings = FLBuilderModel::get_global_settings();
@@ -195,6 +158,6 @@ function return_module_css($type, $id, $settings){
 		include $module->dir . 'includes/frontend.css.php';
 		FLBuilderCSS::render();
 		$css .= ob_get_clean();
-    var_dump(apply_filters( 'fl_builder_render_module_css', $css, $module, $id ));
+   
 		return apply_filters( 'fl_builder_render_module_css', $css, $module, $id );
 }

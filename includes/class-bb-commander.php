@@ -5,7 +5,8 @@ if(!class_exists('BB_Commander')){
       $this->load_dependencies();
     }
     private function load_dependencies() {
-      require PLUGIN_DIR . 'classes/class-linked-styles.php';
+      //require PLUGIN_DIR . 'classes/class-linked-styles.php';
+      
       $this->enqueue_scripts();
       $this->add_shortcut();
     }

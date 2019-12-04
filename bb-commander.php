@@ -21,7 +21,8 @@
  */
 
  define( 'PLUGIN_VERSION', '1.0.0' );
-define( 'PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+	define( 'PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+	define( 'PLUGIN_URL', plugins_url( '/', __FILE__ )  );
 
 function bb_commander_setup(){
 
@@ -29,7 +30,14 @@ function bb_commander_setup(){
 		return null;
 	}
 	
-	//var_dump(PLUGIN_DIR.'includes/class-bb-commander.php');
   require PLUGIN_DIR.'includes/class-bb-commander.php';
 }
 add_action('plugins_loaded', 'bb_commander_setup',11,0);
+
+function init_custom_modules() {
+    if ( class_exists( 'FLBuilder' ) ) {
+        require_once 'custom-markup/custom-markup.php';
+        require_once 'fields/config.php';
+    }
+}
+add_action( 'init', 'init_custom_modules' );

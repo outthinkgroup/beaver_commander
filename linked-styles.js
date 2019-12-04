@@ -15,10 +15,16 @@ window listen for click on save-as button
             module type
 
 */
-function addCustomGlobalSettings(e) {
-  if (e.target.classList.contains("fl-builder-settings-save-as")) {
+function addSaveAsLinkedStyleBtn(e) {
+  console.log("heool");
+  console.log(e.target.classList);
+  if (e.target.classList.contains("fl-module-overlay")) {
     setTimeout(() => {
-      const saveButton = document.querySelector(".fl-builder-settings-save");
+      console.log(document.querySelector(".fl-builder-settings"));
+      /* 
+      
+
+      
       const form = saveButton.closest("[data-node]");
       const node = form.dataset.node;
       const editingElement = document.querySelector(
@@ -27,27 +33,6 @@ function addCustomGlobalSettings(e) {
       if (!editingElement) return;
 
       const type = editingElement.dataset.type;
-
-      const tr = document.createElement("tr"); /*    */
-      const th = document.createElement(
-        "TH"
-      ); /* .classList.add("fl-field-label"); */
-      const td = document.createElement(
-        "td"
-      ); /* .classList.add("fl-field-control"); */
-      const checkbox = document.createElement("INPUT");
-      checkbox.setAttribute("type", "checkbox");
-      checkbox.setAttribute("name", "isLinkedParent");
-
-      const label = document.createElement("LABEL");
-      label.innerText = "Make Linked Parent Style";
-      tr.classList.add("fl-field");
-      td.classList.add("fl-field-control");
-      th.classList.add("fl-field-label");
-      th.appendChild(label);
-      td.appendChild(checkbox);
-      tr.appendChild(th);
-      tr.appendChild(td);
 
       form.querySelector("tbody").appendChild(tr);
       const isLinkedStyle = checkbox.checked;
@@ -73,12 +58,12 @@ function addCustomGlobalSettings(e) {
           credentials: "same-origin",
           body: toQueryString(data)
         }).then(res => console.log(res));
-      });
+      }); */
     }, 1500);
   }
 }
 
-window.addEventListener("click", addCustomGlobalSettings);
+window.addEventListener("click", addSaveAsLinkedStyleBtn);
 
 const toQueryString = data => {
   const urlSearchParams = new URLSearchParams(data);
