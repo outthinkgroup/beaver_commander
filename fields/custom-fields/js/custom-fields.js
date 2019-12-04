@@ -30,17 +30,26 @@ function saveField(e) {
     console.log("fix");
   }
 }
-
+let checkTimes = 0;
 function check() {
-  setTimeout(() => {
-    if (document.querySelector(".commander-custom-fields")) {
-      inputs = document.querySelectorAll(" .commander-custom-fields input");
-      [...inputs].forEach(input => input.addEventListener("change", saveField));
-    } else {
-      console.log("runninnnnnnng");
-      check();
-    }
-  }, 200);
+  if (
+    document
+      .querySelector(".fl-builder-module-settings")
+      .classList.contains("fl-builder-custom-markup-settings")
+  ) {
+    setTimeout(() => {
+      if (document.querySelector(".commander-custom-fields")) {
+        inputs = document.querySelectorAll(" .commander-custom-fields input");
+        [...inputs].forEach(input =>
+          input.addEventListener("change", saveField)
+        );
+      } else if (checkTimes <= 70) {
+        console.log("runninnnnnnng");
+        check();
+        checkTimes += 1;
+      }
+    }, 200);
+  }
 }
 
 FLBuilder.addHook("didShowLightbox", check);
