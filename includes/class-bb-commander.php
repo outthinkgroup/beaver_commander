@@ -2,13 +2,18 @@
 if(!class_exists('BB_Commander')){
   class BB_Commander {
     public function __construct() {
+      
       $this->load_dependencies();
     }
     private function load_dependencies() {
       //require PLUGIN_DIR . 'classes/class-linked-styles.php';
-      
       $this->enqueue_scripts();
-      $this->add_shortcut();
+      if( ( get_option('enabled_features')['shortcuts'] == true ) ){  
+        $this->add_shortcuts();
+      }
+      if( ( get_option('enabled_features')['command_pallete'] == true ) ){  
+        $this->add_command_pallete();
+      }
     }
     private function enqueue_scripts(){
 
@@ -23,6 +28,11 @@ if(!class_exists('BB_Commander')){
             '1.00',
             true 
           );
+          wp_localize_script(
+            'bb-commander-js',
+            'COMMAND_SETTING',
+            get_option('enabled_features')
+          );
           wp_enqueue_style(
             'bb-commander-css',
             plugins_url( '/', dirname(__FILE__) ) . '/dist/bb-commander.css'
@@ -30,13 +40,19 @@ if(!class_exists('BB_Commander')){
         }
       });
     }
-    private function add_shortcut() {
+    private function add_command_pallete() {
       /* adds the shortcut to beaverbuilders shortcut filter */
       add_filter( 'fl_builder_keyboard_shortcuts', function( $shortcuts ) {
-          $shortcuts['openCommandPalette'] = array(
-            'label' => __( 'opens the command palette', 'my-plugin'),
-            'keyCode' => 'P'
-          );
+        $shortcuts['openCommandPalette'] = array(
+          'label' => __( 'opens the command palette', 'my-plugin'),
+          'keyCode' => 'P'
+        );
+        return $shortcuts;
+      });
+    }
+    private function add_shortcuts() {
+      /* adds the shortcut to beaverbuilders shortcut filter */
+      add_filter( 'fl_builder_keyboard_shortcuts', function( $shortcuts ) {
           $shortcuts['openColumnSettings'] = array(
             'label' => __( 'opens the column setting of the hovered module', 'my-plugin'),
             'keyCode' => 'c'
@@ -52,6 +68,14 @@ if(!class_exists('BB_Commander')){
           $shortcuts['openColAdvancedTab'] = array(
             'label' => __( 'opens the settings of the hovered Column and goes to advanced tab', 'my-plugin'),
             'keyCode' => 'A'
+          );
+          $shortcuts['deleteModule'] = array(
+            'label' => __( 'deletes Module'),
+            'keyCode' => 'mod+d'
+          );
+           $shortcuts['deleteColumn'] = array(
+            'label' => __( 'deletes Column'),
+            'keyCode' => 'D'
           );
           return $shortcuts;
       });

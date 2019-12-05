@@ -17,9 +17,17 @@ class CustomMarkup extends FLBuilderModule {
     }
 
     function replace_with_fields($markup, $field, $field_val){
-      //return str_replace('{{'.$field.'}}', $field_val, $markup);
       return str_replace('{{'.$field.'}}', $field_val, $markup);
     }
+
+    function replace_with_acf_fields($markup, $id){
+      $fields = get_field_objects($id);
+      foreach($fields as $field){
+        $markup = str_replace('[['.$field['label'].']]', get_field($field['label']), $markup);
+      }
+      return $markup;
+    }
+
 }
 
 

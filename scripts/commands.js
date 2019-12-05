@@ -172,3 +172,106 @@
   }
   window.addEventListener("load", shortcutHookColumn);
 })();
+
+//delete command
+(function() {
+  function deleteModule(e) {
+    const module = document
+        .querySelector(".fl-module-overlay")
+        .closest(".fl-module"),
+      result = confirm(FLBuilderStrings.deleteModuleMessage);
+
+    if (result) {
+      var row = module.closest(".fl-row"),
+        nodeId = module.getAttribute("data-node");
+
+      FLBuilder.ajax({
+        action: "delete_node",
+        node_id: nodeId
+      });
+
+      module.parentElement.removeChild(module);
+      row.classList.remove("fl-block-overlay-muted");
+      FLBuilder._highlightEmptyCols();
+      FLBuilder._removeAllOverlays();
+      FLBuilder.triggerHook("didDeleteModule", nodeId);
+
+      FLBuilder._removeAllOverlays();
+    }
+    e.stopPropagation();
+  }
+  function shortcutHookColumn() {
+    FLBuilder.addHook("deleteModule", deleteModule);
+  }
+  window.addEventListener("load", shortcutHookColumn);
+})();
+
+//delete COlumn command
+(function() {
+  function deleteColumn(e) {
+    const module = document
+        .querySelector(".fl-module-overlay")
+        .closest(".fl-module"),
+      result = confirm(FLBuilderStrings.deleteModuleMessage);
+    const col = module.closest(".fl-col");
+
+    if (result) {
+      var nodeId = col.getAttribute("data-node"),
+        row = col.closest(".fl-row"),
+        group = col.closest(".fl-col-group"),
+        cols = null,
+        width = 0;
+
+      col.parentElement.removeChild(col);
+      rowCols = [
+        ...row.querySelectorAll(".fl-row-content > .fl-col-group > .fl-col")
+      ];
+      groupCols = [...group.querySelectorAll(".fl-col")];
+
+      if (
+        0 === rowCols.length &&
+        "row" != FLBuilderConfig.userTemplateType &&
+        "column" != FLBuilderConfig.userTemplateType
+      ) {
+        console.log("should delete row");
+      } else {
+        if (0 === groupCols.length) {
+          group.parentElement.removeChild(group);
+        } else {
+          if (6 === groupCols.length) {
+            width = 16.65;
+          } else if (7 === groupCols.length) {
+            width = 14.28;
+          } else {
+            width = Math.round((100 / groupCols.length) * 100) / 100;
+          }
+
+          groupCols.forEach(col => col.style.setProperty("width", width + "%"));
+
+          /* FLBuilder.triggerHook("didResetColumnWidths", {
+            cols: groupCols
+          }); */
+        }
+
+        FLBuilder.ajax({
+          action: "delete_col",
+          node_id: nodeId,
+          new_width: width
+        });
+
+        FLBuilder._initDropTargets();
+        FLBuilder._initSortables();
+        //FLBuilder.triggerHook("didDeleteColumn", nodeId);
+      }
+      FLBuilder._highlightEmptyCols();
+      FLBuilder._removeAllOverlays();
+      FLBuilder._resizeLayout();
+      FLBuilder._removeAllOverlays();
+    }
+    e.stopPropagation();
+  }
+  function shortcutHookColumn() {
+    FLBuilder.addHook("deleteColumn", deleteColumn);
+  }
+  window.addEventListener("load", shortcutHookColumn);
+})();

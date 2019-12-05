@@ -117,7 +117,281 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"scripts/pallet-commands/CMDR_resetFn.js":[function(require,module,exports) {
+})({"scripts/commands.js":[function(require,module,exports) {
+var global = arguments[3];
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+// OPEN SETTINGS COMMANDS
+(function () {
+  function openParentColumnSettings() {
+    var module = document.querySelector(".fl-module-overlay");
+
+    if (!module) {
+      return null;
+    }
+
+    var col = module.closest(".fl-col");
+    var parent = col.parentElement.closest(".fl-col");
+
+    if (!parent) {
+      return null;
+    }
+
+    var nodeId = parent.dataset.node;
+    var global = module.closest(".fl-block-overlay-global") ? true : false;
+    FLBuilderSettingsForms.render({
+      id: "col",
+      nodeId: nodeId,
+      className: "fl-builder-col-settings",
+      attrs: 'data-node="' + nodeId + '"',
+      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
+      badges: global ? [FLBuilderStrings.global] : [],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      preview: {
+        type: "col"
+      }
+    });
+  }
+
+  function shortcutHook() {
+    // Register a hook listener using the key that you registered
+    // your shortcut with along with the function it should fire.
+    FLBuilder.addHook("openParentColumnSettings", openParentColumnSettings);
+  }
+
+  window.addEventListener("load", shortcutHook);
+})();
+
+(function () {
+  function openColumnSettings() {
+    /* 
+    1. set up hover listener
+      - needs to grab:
+         module that is hovered
+         modules column node id = `fl-col.dataset.node
+    2. excute FLBuilderSettingsForms.render(config, callback)
+      - 2. pass settings (argument 1)
+      - 3. pass callback (argrument 2)
+     */
+    var module = document.querySelector(".fl-module-overlay");
+
+    if (!module) {
+      return null;
+    }
+
+    var col = module.closest(".fl-col");
+    var nodeId = col.dataset.node;
+    var global = module.closest(".fl-block-overlay-global") ? true : false;
+    FLBuilderSettingsForms.render({
+      id: "col",
+      nodeId: nodeId,
+      className: "fl-builder-col-settings",
+      attrs: 'data-node="' + nodeId + '"',
+      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
+      badges: global ? [FLBuilderStrings.global] : [],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      preview: {
+        type: "col"
+      }
+    });
+  }
+
+  function shortcutHookColumn() {
+    // Register a hook listener using the key that you registered
+    // your shortcut with along with the function it should fire.
+    FLBuilder.addHook("openColumnSettings", openColumnSettings);
+  }
+
+  window.addEventListener("load", shortcutHookColumn);
+})();
+
+(function () {
+  function openModulesAdvancedTab() {
+    var module = document.querySelector(".fl-module-overlay").closest(".fl-module");
+    console.log(module);
+    var nodeId = module.dataset.node;
+    FLBuilderSettingsForms.render({
+      id: "".concat(module.dataset.type),
+      nodeId: nodeId,
+      className: "fl-builder-module-settings  fl-builder-".concat(module.dataset.type, "-settings"),
+      attrs: 'data-node="' + nodeId + "\" data-type=".concat(module.dataset.type, " novalidate=\"novalidate\" "),
+      buttons: ["save"],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      type: "module",
+      preview: {
+        type: "".concat(module.dataset.type)
+      }
+    }, function () {
+      //makes the advanced tab open
+      var settings = document.querySelector(".fl-builder-module-settings");
+      var tabBar = settings.querySelector(".fl-builder-settings-tabs");
+      tabBar.querySelector(".fl-active").classList.remove("fl-active");
+      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]"); //advancedTab.classList.add("fl-active");
+
+      advancedTab.click();
+    });
+  }
+
+  function shortcutHookColumn() {
+    // Register a hook listener using the key that you registered
+    // your shortcut with along with the function it should fire.
+    FLBuilder.addHook("openModulesAdvancedTab", openModulesAdvancedTab);
+  }
+
+  window.addEventListener("load", shortcutHookColumn);
+})();
+
+(function () {
+  function openColAdvancedTab() {
+    var module = document.querySelector(".fl-module-overlay");
+
+    if (!module) {
+      return null;
+    }
+
+    var col = module.closest(".fl-col");
+    var nodeId = col.dataset.node;
+    var global = module.closest(".fl-block-overlay-global") ? true : false;
+    FLBuilderSettingsForms.render({
+      id: "col",
+      nodeId: nodeId,
+      className: "fl-builder-col-settings",
+      attrs: 'data-node="' + nodeId + '"',
+      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
+      badges: global ? [FLBuilderStrings.global] : [],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      preview: {
+        type: "col"
+      }
+    }, function () {
+      //makes the advanced tab open
+      var settings = document.querySelector(".fl-builder-settings");
+      var tabBar = settings.querySelector(".fl-builder-settings-tabs");
+      tabBar.querySelector(".fl-active").classList.remove("fl-active");
+      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]"); //advancedTab.classList.add("fl-active");
+
+      advancedTab.click();
+    });
+  }
+
+  function shortcutHookColumn() {
+    FLBuilder.addHook("openColAdvancedTab", openColAdvancedTab);
+  }
+
+  window.addEventListener("load", shortcutHookColumn);
+})(); //delete command
+
+
+(function () {
+  function deleteModule(e) {
+    var module = document.querySelector(".fl-module-overlay").closest(".fl-module"),
+        result = confirm(FLBuilderStrings.deleteModuleMessage);
+
+    if (result) {
+      var row = module.closest(".fl-row"),
+          nodeId = module.getAttribute("data-node");
+      FLBuilder.ajax({
+        action: "delete_node",
+        node_id: nodeId
+      });
+      module.parentElement.removeChild(module);
+      row.classList.remove("fl-block-overlay-muted");
+
+      FLBuilder._highlightEmptyCols();
+
+      FLBuilder._removeAllOverlays();
+
+      FLBuilder.triggerHook("didDeleteModule", nodeId);
+
+      FLBuilder._removeAllOverlays();
+    }
+
+    e.stopPropagation();
+  }
+
+  function shortcutHookColumn() {
+    FLBuilder.addHook("deleteModule", deleteModule);
+  }
+
+  window.addEventListener("load", shortcutHookColumn);
+})(); //delete COlumn command
+
+
+(function () {
+  function deleteColumn(e) {
+    var module = document.querySelector(".fl-module-overlay").closest(".fl-module"),
+        result = confirm(FLBuilderStrings.deleteModuleMessage);
+    var col = module.closest(".fl-col");
+
+    if (result) {
+      var nodeId = col.getAttribute("data-node"),
+          row = col.closest(".fl-row"),
+          group = col.closest(".fl-col-group"),
+          cols = null,
+          width = 0;
+      col.parentElement.removeChild(col);
+      rowCols = _toConsumableArray(row.querySelectorAll(".fl-row-content > .fl-col-group > .fl-col"));
+      groupCols = _toConsumableArray(group.querySelectorAll(".fl-col"));
+
+      if (0 === rowCols.length && "row" != FLBuilderConfig.userTemplateType && "column" != FLBuilderConfig.userTemplateType) {
+        console.log("should delete row");
+      } else {
+        if (0 === groupCols.length) {
+          group.parentElement.removeChild(group);
+        } else {
+          if (6 === groupCols.length) {
+            width = 16.65;
+          } else if (7 === groupCols.length) {
+            width = 14.28;
+          } else {
+            width = Math.round(100 / groupCols.length * 100) / 100;
+          }
+
+          groupCols.forEach(function (col) {
+            return col.style.setProperty("width", width + "%");
+          });
+          /* FLBuilder.triggerHook("didResetColumnWidths", {
+            cols: groupCols
+          }); */
+        }
+
+        FLBuilder.ajax({
+          action: "delete_col",
+          node_id: nodeId,
+          new_width: width
+        });
+
+        FLBuilder._initDropTargets();
+
+        FLBuilder._initSortables(); //FLBuilder.triggerHook("didDeleteColumn", nodeId);
+
+      }
+
+      FLBuilder._highlightEmptyCols();
+
+      FLBuilder._removeAllOverlays();
+
+      FLBuilder._resizeLayout();
+
+      FLBuilder._removeAllOverlays();
+    }
+
+    e.stopPropagation();
+  }
+
+  function shortcutHookColumn() {
+    FLBuilder.addHook("deleteColumn", deleteColumn);
+  }
+
+  window.addEventListener("load", shortcutHookColumn);
+})();
+},{}],"scripts/pallet-commands/CMDR_resetFn.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -513,7 +787,51 @@ function _default() {
   var i = 0;
   (0, _CMDR_renderAllModuleSettingsWithArgs.default)(modules, _CMDR_changeFn.default, i, inputName, newValue);
 }
-},{"../util/CMDR_renderAllModuleSettingsWithArgs":"scripts/util/CMDR_renderAllModuleSettingsWithArgs.js","../util/CMDR_changeFn":"scripts/util/CMDR_changeFn.js"}],"scripts/util/createArgForm.js":[function(require,module,exports) {
+},{"../util/CMDR_renderAllModuleSettingsWithArgs":"scripts/util/CMDR_renderAllModuleSettingsWithArgs.js","../util/CMDR_changeFn":"scripts/util/CMDR_changeFn.js"}],"scripts/pallet-commands/editModuleByType.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = _default;
+
+var _CMDR_renderAllModuleSettingsWithArgs = _interopRequireDefault(require("../util/CMDR_renderAllModuleSettingsWithArgs"));
+
+var _CMDR_changeFn = _interopRequireDefault(require("../util/CMDR_changeFn"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _default() {
+  var inputName = document.querySelector(".inputName").value;
+  var newValue = document.querySelector(".toValue").value;
+  var types = document.querySelector(".modules-type-select").value;
+  var modules = document.querySelectorAll(".fl-module[data-type=\"".concat(types, "\"]"));
+  var i = 0;
+  (0, _CMDR_renderAllModuleSettingsWithArgs.default)(modules, _CMDR_changeFn.default, i, inputName, newValue);
+}
+},{"../util/CMDR_renderAllModuleSettingsWithArgs":"scripts/util/CMDR_renderAllModuleSettingsWithArgs.js","../util/CMDR_changeFn":"scripts/util/CMDR_changeFn.js"}],"scripts/util/getAllModuleTypes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = getAllModuleTypes;
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function getAllModuleTypes() {
+  var allModules = document.querySelectorAll(".fl-module");
+  return _toConsumableArray(allModules).map(function (bbModule) {
+    return bbModule.dataset.type;
+  });
+}
+},{}],"scripts/util/createArgForm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -523,7 +841,23 @@ exports.default = createArgForm;
 
 var _openPalette = require("../open-palette");
 
-function createArgForm(inputNameClass, newValueClass, fnToListenFor) {
+var _getAllModuleTypes = _interopRequireDefault(require("./getAllModuleTypes"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function createArgForm(_ref) {
+  var moduleType = _ref.moduleType,
+      inputNameClass = _ref.inputNameClass,
+      newValueClass = _ref.newValueClass,
+      fnToListenFor = _ref.fnToListenFor;
   var container = document.createElement("div");
   var inputName = document.createElement("input");
   var inputValue = document.createElement("input");
@@ -538,6 +872,23 @@ function createArgForm(inputNameClass, newValueClass, fnToListenFor) {
   inputValue.setAttribute("type", "text");
   submitButton.setAttribute("type", "button");
   submitButton.innerText = "RUN";
+  console.log(moduleType);
+
+  if (moduleType == true) {
+    var moduleSelect = document.createElement("select");
+    moduleSelect.classList.add("modules-type-select");
+    var types = (0, _getAllModuleTypes.default)();
+
+    _toConsumableArray(types).forEach(function (type) {
+      var option = document.createElement("OPTION");
+      option.value = type;
+      option.innerText = type;
+      moduleSelect.appendChild(option);
+    });
+
+    container.appendChild(moduleSelect);
+  }
+
   container.appendChild(inputName);
   container.appendChild(inputValue);
   container.appendChild(submitButton);
@@ -549,7 +900,7 @@ function createArgForm(inputNameClass, newValueClass, fnToListenFor) {
   });
   return;
 }
-},{"../open-palette":"scripts/open-palette.js"}],"scripts/open-palette.js":[function(require,module,exports) {
+},{"../open-palette":"scripts/open-palette.js","./getAllModuleTypes":"scripts/util/getAllModuleTypes.js"}],"scripts/open-palette.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -576,6 +927,8 @@ var _resetText = _interopRequireDefault(require("./pallet-commands/resetText"));
 var _resetAllColumns = _interopRequireDefault(require("./pallet-commands/resetAllColumns"));
 
 var _initChangeAllModulesWithArgs = _interopRequireDefault(require("./pallet-commands/initChangeAllModulesWithArgs"));
+
+var _editModuleByType = _interopRequireDefault(require("./pallet-commands/editModuleByType"));
 
 var _createArgForm = _interopRequireDefault(require("./util/createArgForm"));
 
@@ -690,6 +1043,12 @@ var BBCommander = {
     description: "give a selector and what value the input you select should have",
     fn: _initChangeAllModulesWithArgs.default,
     hasArgs: true
+  },
+  editModuleByType: {
+    title: "Edit Modules By Module Type",
+    description: "only selects the module given in the given modules",
+    fn: _editModuleByType.default,
+    hasArgsWithType: true
   }
 };
 
@@ -703,7 +1062,20 @@ function executeCommand(e) {
 
   if (BBCommander[selectedCommand].hasArgs) {
     hideCommandsSearch();
-    (0, _createArgForm.default)("inputName", "toValue", BBCommander[selectedCommand].fn);
+    (0, _createArgForm.default)({
+      moduleType: false,
+      inputNameClass: "inputName",
+      newValueClass: "toValue",
+      fnToListenFor: BBCommander[selectedCommand].fn
+    });
+  } else if (BBCommander[selectedCommand].hasArgsWithType) {
+    hideCommandsSearch();
+    (0, _createArgForm.default)({
+      moduleType: true,
+      inputNameClass: "inputName",
+      newValueClass: "toValue",
+      fnToListenFor: BBCommander[selectedCommand].fn
+    });
   } else {
     BBCommander[selectedCommand].fn();
     cleanupPalette();
@@ -798,168 +1170,7 @@ this is the parent function that calls everything
     return cleanupPaletteOnExit(e);
   });
 })();
-},{"./pallet-commands/CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js","./pallet-commands/CMD_marginsZero":"scripts/pallet-commands/CMD_marginsZero.js","./pallet-commands/resetOpenModule":"scripts/pallet-commands/resetOpenModule.js","./pallet-commands/resetAllModules":"scripts/pallet-commands/resetAllModules.js","./pallet-commands/marginsZeroOpenModule":"scripts/pallet-commands/marginsZeroOpenModule.js","./pallet-commands/marginZeroAllModules":"scripts/pallet-commands/marginZeroAllModules.js","./pallet-commands/resetAllRows":"scripts/pallet-commands/resetAllRows.js","./pallet-commands/resetText":"scripts/pallet-commands/resetText.js","./pallet-commands/resetAllColumns":"scripts/pallet-commands/resetAllColumns.js","./pallet-commands/initChangeAllModulesWithArgs":"scripts/pallet-commands/initChangeAllModulesWithArgs.js","./util/createArgForm":"scripts/util/createArgForm.js"}],"scripts/commands.js":[function(require,module,exports) {
-var global = arguments[3];
-// OPEN SETTINGS COMMANDS
-(function () {
-  function openParentColumnSettings() {
-    var module = document.querySelector(".fl-module-overlay");
-
-    if (!module) {
-      return null;
-    }
-
-    var col = module.closest(".fl-col");
-    var parent = col.parentElement.closest(".fl-col");
-
-    if (!parent) {
-      return null;
-    }
-
-    var nodeId = parent.dataset.node;
-    var global = module.closest(".fl-block-overlay-global") ? true : false;
-    FLBuilderSettingsForms.render({
-      id: "col",
-      nodeId: nodeId,
-      className: "fl-builder-col-settings",
-      attrs: 'data-node="' + nodeId + '"',
-      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
-      badges: global ? [FLBuilderStrings.global] : [],
-      settings: FLBuilderSettingsConfig.nodes[nodeId],
-      preview: {
-        type: "col"
-      }
-    });
-  }
-
-  function shortcutHook() {
-    // Register a hook listener using the key that you registered
-    // your shortcut with along with the function it should fire.
-    FLBuilder.addHook("openParentColumnSettings", openParentColumnSettings);
-  }
-
-  window.addEventListener("load", shortcutHook);
-})();
-
-(function () {
-  function openColumnSettings() {
-    /* 
-    1. set up hover listener
-      - needs to grab:
-         module that is hovered
-         modules column node id = `fl-col.dataset.node
-    2. excute FLBuilderSettingsForms.render(config, callback)
-      - 2. pass settings (argument 1)
-      - 3. pass callback (argrument 2)
-     */
-    var module = document.querySelector(".fl-module-overlay");
-
-    if (!module) {
-      return null;
-    }
-
-    var col = module.closest(".fl-col");
-    var nodeId = col.dataset.node;
-    var global = module.closest(".fl-block-overlay-global") ? true : false;
-    FLBuilderSettingsForms.render({
-      id: "col",
-      nodeId: nodeId,
-      className: "fl-builder-col-settings",
-      attrs: 'data-node="' + nodeId + '"',
-      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
-      badges: global ? [FLBuilderStrings.global] : [],
-      settings: FLBuilderSettingsConfig.nodes[nodeId],
-      preview: {
-        type: "col"
-      }
-    });
-  }
-
-  function shortcutHookColumn() {
-    // Register a hook listener using the key that you registered
-    // your shortcut with along with the function it should fire.
-    FLBuilder.addHook("openColumnSettings", openColumnSettings);
-  }
-
-  window.addEventListener("load", shortcutHookColumn);
-})();
-
-(function () {
-  function openModulesAdvancedTab() {
-    var module = document.querySelector(".fl-module-overlay").closest(".fl-module");
-    console.log(module);
-    var nodeId = module.dataset.node;
-    FLBuilderSettingsForms.render({
-      id: "".concat(module.dataset.type),
-      nodeId: nodeId,
-      className: "fl-builder-module-settings  fl-builder-".concat(module.dataset.type, "-settings"),
-      attrs: 'data-node="' + nodeId + "\" data-type=".concat(module.dataset.type, " novalidate=\"novalidate\" "),
-      buttons: ["save"],
-      settings: FLBuilderSettingsConfig.nodes[nodeId],
-      type: "module",
-      preview: {
-        type: "".concat(module.dataset.type)
-      }
-    }, function () {
-      //makes the advanced tab open
-      var settings = document.querySelector(".fl-builder-module-settings");
-      var tabBar = settings.querySelector(".fl-builder-settings-tabs");
-      tabBar.querySelector(".fl-active").classList.remove("fl-active");
-      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]"); //advancedTab.classList.add("fl-active");
-
-      advancedTab.click();
-    });
-  }
-
-  function shortcutHookColumn() {
-    // Register a hook listener using the key that you registered
-    // your shortcut with along with the function it should fire.
-    FLBuilder.addHook("openModulesAdvancedTab", openModulesAdvancedTab);
-  }
-
-  window.addEventListener("load", shortcutHookColumn);
-})();
-
-(function () {
-  function openColAdvancedTab() {
-    var module = document.querySelector(".fl-module-overlay");
-
-    if (!module) {
-      return null;
-    }
-
-    var col = module.closest(".fl-col");
-    var nodeId = col.dataset.node;
-    var global = module.closest(".fl-block-overlay-global") ? true : false;
-    FLBuilderSettingsForms.render({
-      id: "col",
-      nodeId: nodeId,
-      className: "fl-builder-col-settings",
-      attrs: 'data-node="' + nodeId + '"',
-      buttons: !global && !FLBuilderConfig.lite && !FLBuilderConfig.simpleUi ? ["save-as"] : [],
-      badges: global ? [FLBuilderStrings.global] : [],
-      settings: FLBuilderSettingsConfig.nodes[nodeId],
-      preview: {
-        type: "col"
-      }
-    }, function () {
-      //makes the advanced tab open
-      var settings = document.querySelector(".fl-builder-settings");
-      var tabBar = settings.querySelector(".fl-builder-settings-tabs");
-      tabBar.querySelector(".fl-active").classList.remove("fl-active");
-      var advancedTab = tabBar.querySelector("[href = \"#fl-builder-settings-tab-advanced\"]"); //advancedTab.classList.add("fl-active");
-
-      advancedTab.click();
-    });
-  }
-
-  function shortcutHookColumn() {
-    FLBuilder.addHook("openColAdvancedTab", openColAdvancedTab);
-  }
-
-  window.addEventListener("load", shortcutHookColumn);
-})();
-},{}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+},{"./pallet-commands/CMDR_resetFn":"scripts/pallet-commands/CMDR_resetFn.js","./pallet-commands/CMD_marginsZero":"scripts/pallet-commands/CMD_marginsZero.js","./pallet-commands/resetOpenModule":"scripts/pallet-commands/resetOpenModule.js","./pallet-commands/resetAllModules":"scripts/pallet-commands/resetAllModules.js","./pallet-commands/marginsZeroOpenModule":"scripts/pallet-commands/marginsZeroOpenModule.js","./pallet-commands/marginZeroAllModules":"scripts/pallet-commands/marginZeroAllModules.js","./pallet-commands/resetAllRows":"scripts/pallet-commands/resetAllRows.js","./pallet-commands/resetText":"scripts/pallet-commands/resetText.js","./pallet-commands/resetAllColumns":"scripts/pallet-commands/resetAllColumns.js","./pallet-commands/initChangeAllModulesWithArgs":"scripts/pallet-commands/initChangeAllModulesWithArgs.js","./pallet-commands/editModuleByType":"scripts/pallet-commands/editModuleByType.js","./util/createArgForm":"scripts/util/createArgForm.js"}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
 var bundleURL = null;
 
 function getBundleURLCached() {
@@ -1034,12 +1245,12 @@ module.hot.accept(reloadCSS);
 },{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js"}],"bb-commander.js":[function(require,module,exports) {
 "use strict";
 
-require("./scripts/open-palette");
-
 require("./scripts/commands");
 
+require("./scripts/open-palette");
+
 require("./styles/palette.scss");
-},{"./scripts/open-palette":"scripts/open-palette.js","./scripts/commands":"scripts/commands.js","./styles/palette.scss":"styles/palette.scss"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./scripts/commands":"scripts/commands.js","./scripts/open-palette":"scripts/open-palette.js","./styles/palette.scss":"styles/palette.scss"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

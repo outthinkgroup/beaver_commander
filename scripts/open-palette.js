@@ -9,6 +9,7 @@ import resetAllRows from "./pallet-commands/resetAllRows";
 import resetText from "./pallet-commands/resetText";
 import resetAllColumns from "./pallet-commands/resetAllColumns";
 import initChangeAllModulesWithArgs from "./pallet-commands/initChangeAllModulesWithArgs";
+import editModuleByType from "./pallet-commands/editModuleByType";
 import createArgForm from "./util/createArgForm";
 
 /**
@@ -121,6 +122,12 @@ const BBCommander = {
       "give a selector and what value the input you select should have",
     fn: initChangeAllModulesWithArgs,
     hasArgs: true
+  },
+  editModuleByType: {
+    title: "Edit Modules By Module Type",
+    description: "only selects the module given in the given modules",
+    fn: editModuleByType,
+    hasArgsWithType: true
   }
 };
 
@@ -136,7 +143,20 @@ function executeCommand(e) {
 
   if (BBCommander[selectedCommand].hasArgs) {
     hideCommandsSearch();
-    createArgForm("inputName", "toValue", BBCommander[selectedCommand].fn);
+    createArgForm({
+      moduleType: false,
+      inputNameClass: "inputName",
+      newValueClass: "toValue",
+      fnToListenFor: BBCommander[selectedCommand].fn
+    });
+  } else if (BBCommander[selectedCommand].hasArgsWithType) {
+    hideCommandsSearch();
+    createArgForm({
+      moduleType: true,
+      inputNameClass: "inputName",
+      newValueClass: "toValue",
+      fnToListenFor: BBCommander[selectedCommand].fn
+    });
   } else {
     BBCommander[selectedCommand].fn();
     cleanupPalette();

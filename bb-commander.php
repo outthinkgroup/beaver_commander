@@ -30,14 +30,22 @@ function bb_commander_setup(){
 		return null;
 	}
 	
-  require PLUGIN_DIR.'includes/class-bb-commander.php';
+    require PLUGIN_DIR.'includes/class-bb-commander.php';
+  
 }
 add_action('plugins_loaded', 'bb_commander_setup',11,0);
 
 function init_custom_modules() {
-    if ( class_exists( 'FLBuilder' ) ) {
+    if ( class_exists( 'FLBuilder' ) && (get_option('enabled_features')['custom_markup'] == true) ) {
         require_once 'custom-markup/custom-markup.php';
         require_once 'fields/config.php';
     }
 }
 add_action( 'init', 'init_custom_modules' );
+
+function init_bb_commander_options(){
+  if ( class_exists( 'FLBuilder' ) ) {
+    require_once 'classes/classes_bb_commander_options.php';
+  }
+}
+add_action( 'init', 'init_bb_commander_options' );
