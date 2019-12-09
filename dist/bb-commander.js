@@ -117,8 +117,82 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"scripts/commands.js":[function(require,module,exports) {
+})({"scripts/util/copytoclipboard.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var copyToClipboard = function copyToClipboard(str) {
+  var el = document.createElement("textarea");
+  el.value = str;
+  document.body.appendChild(el);
+  el.select();
+  document.execCommand("copy");
+  document.body.removeChild(el);
+};
+
+var _default = copyToClipboard;
+exports.default = _default;
+},{}],"scripts/util/extend.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+// Pass in the objects to merge as arguments.
+// For a deep extend, set the first argument to `true`.
+var extend = function extend() {
+  // Variables
+  var extended = {};
+  var deep = false;
+  var i = 0;
+  var length = arguments.length; // Check if a deep merge
+
+  if (Object.prototype.toString.call(arguments[0]) === "[object Boolean]") {
+    deep = arguments[0];
+    i++;
+  } // Merge the object into the extended object
+
+
+  var merge = function merge(obj) {
+    for (var prop in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+        // If deep merge and property is an object, merge properties
+        if (deep && Object.prototype.toString.call(obj[prop]) === "[object Object]") {
+          extended[prop] = extend(true, extended[prop], obj[prop]);
+        } else {
+          extended[prop] = obj[prop];
+        }
+      }
+    }
+  }; // Loop through each object and conduct a merge
+
+
+  for (; i < length; i++) {
+    var obj = arguments[i];
+    merge(obj);
+  }
+
+  return extended;
+};
+
+var _default = extend;
+exports.default = _default;
+},{}],"scripts/commands.js":[function(require,module,exports) {
 var global = arguments[3];
+"use strict";
+
+var _copytoclipboard = _interopRequireDefault(require("./util/copytoclipboard"));
+
+var _extend = _interopRequireDefault(require("./util/extend"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -390,8 +464,128 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   }
 
   window.addEventListener("load", shortcutHookColumn);
+})(); //copy and paste modules styles
+
+
+(function () {
+  function copyModSettings(e) {
+    var module = document.querySelector(".fl-module-overlay").closest(".fl-module");
+    /* 
+    
+    2.get module node
+    3.render module settings
+    4.get type type = $(".fl-builder-module-settings").data("type"),
+    5.settings = FLBuilder._getSettings(form)
+    */
+
+    var nodeId = module.dataset.node,
+        type = module.dataset.type;
+    FLBuilderSettingsForms.render({
+      id: "".concat(module.dataset.type),
+      nodeId: nodeId,
+      className: "fl-builder-module-settings  fl-builder-".concat(module.dataset.type, "-settings"),
+      attrs: 'data-node="' + nodeId + "\" data-type=".concat(module.dataset.type, " novalidate=\"novalidate\" "),
+      buttons: ["save"],
+      settings: FLBuilderSettingsConfig.nodes[nodeId],
+      type: "module",
+      preview: {
+        type: "".concat(type)
+      }
+    }, function () {
+      //makes the advanced tab open
+      var form = document.querySelector(".fl-builder-module-settings[data-node=\"".concat(nodeId, "\"]")),
+          settings = FLBuilderSettingsConfig.nodes[nodeId],
+          d = new Date(),
+          date = d.toDateString(),
+          wrap = "/// {type:".concat(type, "} ").concat(date, "///");
+      var styles = {};
+
+      for (var key in settings) {
+        console.log(key);
+        var input = document.querySelector("[name*=\"".concat(key, "\"]"));
+        var field = input && input.closest(".fl-field");
+
+        if (field && field.getAttribute("data-is-style") == "true") {
+          styles[key] = settings[key];
+        }
+      } //
+
+
+      var stringToCopy = "".concat(wrap, "/").concat(JSON.stringify(styles));
+      (0, _copytoclipboard.default)(stringToCopy);
+      console.log(stringToCopy);
+
+      FLBuilder._lightbox.close();
+    });
+  }
+
+  function shortcutHookCopyMod() {
+    FLBuilder.addHook("copyModSettings", copyModSettings);
+  }
+
+  window.addEventListener("load", shortcutHookCopyMod);
+})(); // paste modules styles
+
+
+(function () {
+  function pasteModSettings(e) {
+    var _this = this;
+
+    var module = document.querySelector(".fl-module-overlay").closest(".fl-module");
+    var type = module.dataset.type;
+    var data = "";
+    navigator.clipboard.readText().then(function (text) {
+      var moduleType = type;
+      var checkType = false;
+      data = text;
+      t = data.match(/\/\/\/\s\{type:([a-z0-9-]+)/);
+
+      if (t && typeof t[1] !== "undefined") {
+        checkType = t[1];
+      }
+
+      if (checkType && checkType === moduleType) {
+        var cleandata = data.replace(/\/\/\/.+\/\/\//, "");
+
+        try {
+          var importedSettings = JSON.parse(cleandata);
+        } catch (err) {
+          console.log(err);
+          var importedSettings = false; //!errorDiv.html(FLBuilderStrings.module_import.error).show();
+
+          return false;
+        }
+      }
+
+      if (importedSettings) {
+        var nodeId = module.dataset.node;
+        var merged = (0, _extend.default)({}, FLBuilderSettingsConfig.nodes[nodeId], importedSettings);
+        FLBuilderSettingsConfig.nodes[nodeId] = merged;
+        FLBuilder.ajax({
+          action: "save_settings",
+          node_id: nodeId,
+          settings: merged
+        }, FLBuilder._saveSettingsComplete.bind(_this, true, null));
+        FLBuilder.triggerHook("didSaveNodeSettings", {
+          nodeId: nodeId,
+          settings: merged
+        });
+
+        FLBuilder._lightbox.close();
+      }
+    }) //reading clipboard history
+    .catch(function (err) {
+      console.error(err);
+    }); //error of reading clipboard history
+  }
+
+  function shortcutHookPasteMod() {
+    FLBuilder.addHook("pasteModSettings", pasteModSettings);
+  }
+
+  window.addEventListener("load", shortcutHookPasteMod);
 })();
-},{}],"scripts/pallet-commands/CMDR_resetFn.js":[function(require,module,exports) {
+},{"./util/copytoclipboard":"scripts/util/copytoclipboard.js","./util/extend":"scripts/util/extend.js"}],"scripts/pallet-commands/CMDR_resetFn.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -1278,7 +1472,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56848" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62448" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

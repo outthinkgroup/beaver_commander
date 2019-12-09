@@ -77,6 +77,14 @@ if(!class_exists('BB_Commander')){
             'label' => __( 'deletes Column'),
             'keyCode' => 'D'
           );
+           $shortcuts['copyModSettings'] = array(
+            'label' => __( 'copies modules styles'),
+            'keyCode' => 'mod+c'
+          );
+          $shortcuts['pasteModSettings'] = array(
+            'label' => __( 'pastes modules styles'),
+            'keyCode' => 'mod+v'
+          );
           return $shortcuts;
       });
     }

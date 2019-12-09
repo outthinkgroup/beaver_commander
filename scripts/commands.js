@@ -1,3 +1,6 @@
+import copyToClipboard from "./util/copytoclipboard";
+import extend from "./util/extend";
+
 // OPEN SETTINGS COMMANDS
 (function() {
   function openParentColumnSettings() {
@@ -274,4 +277,139 @@
     FLBuilder.addHook("deleteColumn", deleteColumn);
   }
   window.addEventListener("load", shortcutHookColumn);
+})();
+
+//copy and paste modules styles
+(function() {
+  function copyModSettings(e) {
+    const module = document
+      .querySelector(".fl-module-overlay")
+      .closest(".fl-module");
+
+    /* 
+    
+    2.get module node
+    3.render module settings
+    4.get type type = $(".fl-builder-module-settings").data("type"),
+    5.settings = FLBuilder._getSettings(form)
+    */
+    const nodeId = module.dataset.node,
+      type = module.dataset.type;
+
+    FLBuilderSettingsForms.render(
+      {
+        id: `${module.dataset.type}`,
+        nodeId: nodeId,
+        className: `fl-builder-module-settings  fl-builder-${
+          module.dataset.type
+        }-settings`,
+        attrs:
+          'data-node="' +
+          nodeId +
+          `" data-type=${module.dataset.type} novalidate="novalidate" `,
+        buttons: ["save"],
+        settings: FLBuilderSettingsConfig.nodes[nodeId],
+        type: "module",
+        preview: {
+          type: `${type}`
+        }
+      },
+      function() {
+        //makes the advanced tab open
+        const form = document.querySelector(
+            `.fl-builder-module-settings[data-node="${nodeId}"]`
+          ),
+          settings = FLBuilderSettingsConfig.nodes[nodeId],
+          d = new Date(),
+          date = d.toDateString(),
+          wrap = `/// {type:${type}} ${date}///`;
+        let styles = {};
+        for (const key in settings) {
+          console.log(key);
+          const input = document.querySelector(`[name*="${key}"]`);
+          const field = input && input.closest(".fl-field");
+          if (field && field.getAttribute("data-is-style") == "true") {
+            styles[key] = settings[key];
+          }
+        }
+        //
+        const stringToCopy = `${wrap}/${JSON.stringify(styles)}`;
+        copyToClipboard(stringToCopy);
+        console.log(stringToCopy);
+        FLBuilder._lightbox.close();
+      }
+    );
+  }
+  function shortcutHookCopyMod() {
+    FLBuilder.addHook("copyModSettings", copyModSettings);
+  }
+  window.addEventListener("load", shortcutHookCopyMod);
+})();
+
+// paste modules styles
+(function() {
+  function pasteModSettings(e) {
+    const module = document
+      .querySelector(".fl-module-overlay")
+      .closest(".fl-module");
+    const type = module.dataset.type;
+    let data = "";
+    navigator.clipboard
+      .readText()
+      .then(text => {
+        const moduleType = type;
+        let checkType = false;
+        data = text;
+        t = data.match(/\/\/\/\s\{type:([a-z0-9-]+)/);
+
+        if (t && typeof t[1] !== "undefined") {
+          checkType = t[1];
+        }
+
+        if (checkType && checkType === moduleType) {
+          var cleandata = data.replace(/\/\/\/.+\/\/\//, "");
+          try {
+            var importedSettings = JSON.parse(cleandata);
+          } catch (err) {
+            console.log(err);
+            var importedSettings = false;
+            //!errorDiv.html(FLBuilderStrings.module_import.error).show();
+            return false;
+          }
+        }
+
+        if (importedSettings) {
+          const nodeId = module.dataset.node;
+
+          const merged = extend(
+            {},
+            FLBuilderSettingsConfig.nodes[nodeId],
+            importedSettings
+          );
+          FLBuilderSettingsConfig.nodes[nodeId] = merged;
+
+          FLBuilder.ajax(
+            {
+              action: "save_settings",
+              node_id: nodeId,
+              settings: merged
+            },
+            FLBuilder._saveSettingsComplete.bind(this, true, null)
+          );
+
+          FLBuilder.triggerHook("didSaveNodeSettings", {
+            nodeId: nodeId,
+            settings: merged
+          });
+          FLBuilder._lightbox.close();
+        }
+      }) //reading clipboard history
+      .catch(err => {
+        console.error(err);
+      }); //error of reading clipboard history
+  }
+  function shortcutHookPasteMod() {
+    FLBuilder.addHook("pasteModSettings", pasteModSettings);
+  }
+  window.addEventListener("load", shortcutHookPasteMod);
 })();
