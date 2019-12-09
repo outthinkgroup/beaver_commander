@@ -11,7 +11,7 @@
  * Plugin Name:       Beaver Builder Commander  
  * Plugin URI:        
  * Description:       Adds a command Palette to  
- * Version:           1.0.0
+ * Version:           1.0.1
  * Author:            Outthink
  * Author URI:        outthinkgroup.com
  * License:           GPL-2.0+
